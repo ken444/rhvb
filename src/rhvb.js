@@ -1,15 +1,14 @@
-import { html } from 'https://unpkg.com/lit?module';
-import { component, useState } from 'https://unpkg.com/haunted/haunted.js';
+document.getElementById("app").innerHTML = `
+<h1>Hello Counter!</h1>
+<div>
+ <p>Counter: <span>0<span></p>
+ <button id="mainButton">Increment!</button>
+</div>
+`;
+let counter = document.querySelector("span");
+let counterState = Number(counter.innerText);
+const increaseButton = document.getElementById("mainButton");
 
-function Counter() {
-  const [count, setCount] = useState(0);
-
-  return html`
-    <div part="count">${count}</div>
-    <button part="button" @click=${() => setCount(count + 1)}>
-      Increment
-    </button>
-  `;
-}
-
-customElements.define('my-counter', component(Counter));
+increaseButton.addEventListener("click", () => {
+  counter.innerText = counterState += 1;
+});
