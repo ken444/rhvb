@@ -1,9 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
-  </head>
-<fluent-button >Hello world</fluent-button>
+
+<head>
+  <!-- <script type="module" src="https://unpkg.com/@fluentui/web-components"></script> -->
+  <script src="./src/rhvb.js" type=”module”></script>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+    }
+
+    body,
+    my-counter {
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    my-counter {
+      gap: 20px;
+    }
+
+    my-counter::part(count) {
+      font-size: 24px;
+    }
+
+    my-counter::part(button) {
+      background: transparent;
+      border: 4px solid black;
+      padding: 6px 12px;
+      font-size: 18px;
+      border-radius: 8px;
+    }
+
+    my-counter::part(button):active {
+      background: rgba(0, 0, 0, 0.1);
+      transform: translate(1px, 1px);
+    }
+  </style>
+</head>
+<my-counter></my-counter>
+<!-- <fluent-button onclick="sayHi('Bye')">Hello world</fluent-button>
 <fluent-listbox aria-labelledby="lb_label">
   <fluent-option value="fn">Foxtrot November</fluent-option>
   <fluent-option value="gs">Golf Sierra981</fluent-option>
@@ -12,6 +49,6 @@
   <fluent-option value="l">Lima234234</fluent-option>
   <fluent-option value="m">Mike</fluent-option>
   <fluent-option disabled value="x">X-ray</fluent-option>
-</fluent-listbox>
-<script src=”./src/rhvb.js” type=”module”></script>
+</fluent-listbox> -->
+
 </html>
