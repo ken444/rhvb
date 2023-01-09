@@ -20,7 +20,7 @@ const scorePage = (t1, t2, id) => html`
     ${scoreLine(t2, "in2")}
   
     <div class=${tw`center`}>
-      <button class=${tw`text-4xl m-4 p-4 font-semibold text-white bg-blue-500 border-b-4 border-blue-700 rounded-3xl
+      <button tabindex="0" class=${tw`text-4xl m-4 p-4 font-semibold text-white bg-blue-500 border-b-4 border-blue-700 rounded-3xl
         shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${()=> rerender(null)}>Save</button>
     </div>
   </div>
