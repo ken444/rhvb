@@ -95,3 +95,43 @@ const dom$ = combineLatest(name$, popup$).pipe(map(([name, popup]) => html`
 // And then call subscribe in order to get the TemplateResult every time it changes.
 dom$.subscribe(dom => render(dom, document.body));
 
+const scoreLine = (t1, id) => html`
+  <div class=${tw`p-4 m-4 rounded-3xl bg-red-400 grid grid-cols-3 items-center text-8xl `}>
+    <div class=${tw`col-span-2`}>${t1}</div>
+    <input id = ${id} class=${tw`rounded-3xl`} type="number">
+  </div>
+`;
+
+const scorePage = (t1, t2, id) => html`
+  <div class=${tw`grid`}>
+    <i class=${tw`material-icons text-8xl m-4 p-4`} @click=${()=> rerender(null)}>close</i>
+  
+    ${scoreLine(t1, "in1")}
+    ${scoreLine(t2, "in2")}
+  
+
+      <button tabindex="0" class=${tw`text-4xl m-8 p-8 font-semibold text-white bg-blue-500 border-b-4 border-blue-700 rounded-3xl
+        shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${async () => await saveScore(id)}>Save</button>
+
+  </div>
+`;
+
+//const uri = "http://localhost:3000";
+const uri = "https://node12351232153234.azurewebsites.net"
+
+const  saveScore = async (id) => {
+  let score = {
+    date: date1,
+    game: id,
+    score1: document.getElementById("in1").value,
+    score2: document.getElementById("in2").value
+  };
+  const response = await fetch(uri, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json;charset=utf-8' },
+    body: JSON.stringify(score)
+  });
+
+  rerender(null);
+
+}

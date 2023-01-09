@@ -21,12 +21,32 @@ const scorePage = (t1, t2, id) => html`
   
 
       <button tabindex="0" class=${tw`text-4xl m-8 p-8 font-semibold text-white bg-blue-500 border-b-4 border-blue-700 rounded-3xl
-        shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${()=> rerender(null)}>Save</button>
+        shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${()=> saveScore(id)}>Save</button>
 
   </div>
 `;
 
+//const uri = "http://localhost:3000";
+const uri = "https://node12351232153234.azurewebsites.net"
 
+const  saveScore = async (id) => {
+
+
+  let score = {
+    date: date1,
+    game: id,
+    score1: document.getElementById("in1").value,
+    score2: document.getElementById("in2").value
+  };
+  const response = await fetch(uri, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json;charset=utf-8' },
+    body: JSON.stringify(score)
+  });
+
+  rerender(null);
+  return (await response.json());
+}
 
 
 
@@ -38,8 +58,7 @@ const scorePage = (t1, t2, id) => html`
     <line x1="6" y1="6" x2="90" y2="90"></line>
 </svg> */}
 
-//const uri = "http://localhost:3000";
-const uri = "https://node12351232153234.azurewebsites.net"
+
 
 const dom1 = () => html`
 <div class=${tw`grid`}>
@@ -153,7 +172,7 @@ const htmlArray = scheduleArray.map((element) => {
 const vis = (v) => v ? "" : "hidden";
 
 const mainPage = html`
-  <div class=${tw`grid text-8xl`}> ${htmlArray} </div>
+  <div class=${tw`grid text-7xl`}> ${htmlArray} </div>
 `;
 
 const dom = (page2) => html`
