@@ -5,25 +5,24 @@ import { html, render } from 'https://unpkg.com/lit-html?module';
 
 import { tw } from 'https://cdn.skypack.dev/twind';
 
-const scoreLine = t1 => html`
-  <div class=${tw`p-4 m-4 rounded-3xl bg-red-400 grid grid-cols-3 items-center`}>
+const scoreLine = (t1, id) => html`
+  <div class=${tw`p-4 m-4 rounded-3xl bg-red-400 grid grid-cols-3 items-center text-8xl `}>
     <div class=${tw`col-span-2`}>${t1}</div>
-    <input autofocus class=${tw`rounded-3xl`} type="number">
+    <input id = ${id} autofocus class=${tw`rounded-3xl`} type="number">
   </div>
 `;
 
 const scorePage = (t1, t2, id) => html`
-  <div class=${tw`text-8xl grid`}>
+  <div class=${tw`grid`}>
     <i class=${tw`material-icons text-8xl m-4 p-4`} @click=${()=> rerender(null)}>close</i>
   
-    ${scoreLine(t1)}
-    ${scoreLine(t2)}
+    ${scoreLine(t1, "in1")}
+    ${scoreLine(t2, "in2")}
   
     <div class=${tw`center`}>
-      <button class=${tw`m-4 p-4 font-semibold text-white bg-blue-500 border-b-4 border-blue-700 rounded-3xl
+      <button class=${tw`text-4xl m-4 p-4 font-semibold text-white bg-blue-500 border-b-4 border-blue-700 rounded-3xl
         shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${()=> rerender(null)}>Save</button>
     </div>
-  </div>
   </div>
 `;
 
@@ -75,9 +74,10 @@ const dom3 = () => html`
   </div>
 `;
 
+
 const game = (t1, t2, id) => html`
   <div id="${id}" @click=${() => rerender(dom(scorePage(t1,t2,id)))}
-    class=${tw`rounded-3xl bg-blue-400 p-8 m-4 grid grid-flow-col grid-cols-7 items-center`}>
+    class=${tw`rounded-2xl bg-blue-400 p-4 m-4 grid grid-flow-col grid-cols-7 items-center`}>
     <div class=${tw`col-span-2`}>${t1}</div>
     <div class=${tw`justify-self-end score1`}></div>
     <div></div>
@@ -88,7 +88,7 @@ const game = (t1, t2, id) => html`
 
 const heading = (s) => html`
   <div
-    class=${tw`rounded-3xl bg-red-400 p-8 m-4`}>
+    class=${tw`rounded-2xl bg-red-400 p-4 m-4 text-6xl text-center font-semibold `}>
     <div class=${tw``}>${s}</div>
   </div>
 `;
@@ -163,7 +163,10 @@ const dom = (page2) => html`
   </main>
 `;
 
-const rerender = page => render(dom(page), document.body);
+const rerender = page => {
+ render(dom(page), document.body);
+ if (page) document.getElementById("in1").focus();
+}
 
 rerender(null);
 
