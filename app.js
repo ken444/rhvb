@@ -8,7 +8,7 @@ import { tw } from 'https://cdn.skypack.dev/twind';
 const scoreLine = (t1, id) => html`
   <div class=${tw`p-4 m-4 rounded-3xl bg-red-400 grid grid-cols-3 items-center text-8xl `}>
     <div class=${tw`col-span-2`}>${t1}</div>
-    <input id = ${id} class=${tw`rounded-3xl`} type="number">
+    <input id = ${id} autofocus class=${tw`rounded-3xl`} type="number">
   </div>
 `;
 
@@ -21,7 +21,7 @@ const scorePage = (t1, t2, id) => html`
   
 
       <button tabindex="0" class=${tw`text-4xl m-8 p-8 font-semibold text-white bg-blue-500 border-b-4 border-blue-700 rounded-3xl
-        shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${()=> saveScore(id)}>Save</button>
+        shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${()=> rerender(null)}>Save</button>
 
   </div>
 `;
