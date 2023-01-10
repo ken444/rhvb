@@ -20,7 +20,7 @@ const scorePage = html`
       ${scoreLine}
     </div>
   
-    <button tabindex="0" class=${tw`text-4xl m-8 p-8 font-semibold text-white bg-blue-500 border-b-4 border-blue-700
+    <button tabindex="0" class=${tw`text-6xl m-8 p-8 font-semibold text-white bg-blue-500 border-b-4 border-blue-700
       rounded-3xl shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${async ()=> saveScore()}>Save</button>
   </div>
   
@@ -28,8 +28,8 @@ const scorePage = html`
     
 `;
 
-//const uri = "http://localhost:3000";
-const uri = "https://node12351232153234.azurewebsites.net"
+const uri = "http://localhost:3000";
+//const uri = "https://node12351232153234.azurewebsites.net"
 
 const  saveScore = async () => {
 
@@ -67,15 +67,6 @@ const game1 = (teams, scores) => html`
   </div>
 `;
 
-const getPastScores = async (id, teams) => {
-
-  render(html``, vm.entryHistory);
-  const t = await (await fetch(`${uri}/date/'${vm.date}'/game/'${id}'`)).json();
-
-  render(t.map(x => game1(teams, x.scores)), vm.entryHistory);
-
-}
-
 const team = (t, s) => html`
   <div class=${tw`col-span-2 team`}>${t}</div>
   <div class=${tw`justify-self-end score`}>${s}</div>
@@ -91,11 +82,16 @@ const game = (id, teams) => html`
 `;
 
 const heading = (s) => html`
-  <div class=${tw`p-4 text-6xl text-center font-semibold`}>${s}</div>
+  <div class=${tw`text-6xl text-center font-semibold`}>${s}</div>
+`;
+
+const title = (s) => html`
+  <div class=${tw`rounded-2xl bg-red-400 text-6xl text-center px-8 py-2 place-self-center`}>${s}</div>
 `;
 
 const schedule = 
 `
+h	Jan 12 2023		
 d	20230102		
 t	8:15 OLQW		
 g	Karen	Derek	N
@@ -138,21 +134,25 @@ g	Aven	Wayne
 
 let vm = {};
 
+
+
 let gameIndex = 0;
 const htmlArray = schedule.split('\n').map((element) => {
   let entry = element.split('\t');
-  switch(entry[0]) {
+  switch(entry[0]) {  
     case 'g':
       return game(`${gameIndex++}`, [entry[1], entry[2]])
     case 't':
       return heading(entry[1]);
+    case 'h':
+      return title(entry[1]);
     case 'd':
-      vm.date = entry[1]
-  }
-})
+      vm.date = entry[1];
+  }}
+)
 
 const mainPage = html`
-  <div class=${tw`grid text-7xl`}> ${htmlArray} </div>
+  <div class=${tw`grid text-8xl`}> ${htmlArray} </div>
 `;
 
 const dom = html`
@@ -164,6 +164,7 @@ render(dom, document.body);
 
 const arrayMap = (...args) => Array.prototype.map.call(...args);
 
+vm.stage = -1;
 vm.mainPage = document.getElementById("mainPage");
 vm.entryPage = document.getElementById("entryPage");
 vm.entryTeams = vm.entryPage.getElementsByClassName('entryTeam');
@@ -175,10 +176,6 @@ vm.setScores = (id, scores) => {
   scores.map((v,i) => vm.gameScores[id][i].innerHTML = v);
 }
 
-vm.getScores = async () => {
-  const t = await (await fetch(`${uri}/date/'${vm.date}'`)).json();
-  t.map(v=>vm.setScores(v.game, v.scores));
-}
 
 vm.doEntry = (id, teams) => {
   if (id) {
@@ -190,12 +187,37 @@ vm.doEntry = (id, teams) => {
     vm.entryPage.style.display = 'block';
     vm.entryScores[0].focus();
 
-    getPastScores(id, teams);
+    vm.getPastScores(id, teams);
   } else {
     vm.entryPage.style.display = 'none';
     vm.mainPage.style.visibility = '';
   }
 }
 
+vm.getScores = async () => {
+
+  const jj = `${uri}/date/'${vm.date}'/${vm.stage}`;
+
+  const t = await (await fetch(`${uri}/date/'${vm.date}'/${vm.stage}`)).json();
+  vm.stage = t.stage;
+
+  if (t.data) 
+  t.data.map(v=>vm.setScores(v.game, v.scores));
+}
+
+
+
+
+
+
+vm.getPastScores = async (id, teams) => {
+  render(html``, vm.entryHistory);
+  const t = await (await fetch(`${uri}/date/'${vm.date}'/game/'${id}/'${vm.stage}'`)).json();
+  vm.stage = t.stage;
+  if (t.data) render(t.data.map(x => game1(teams, x.scores)), vm.entryHistory);
+}
+
+
 await vm.getScores();
 
+setInterval(async () => await vm.getScores(), 5000);
