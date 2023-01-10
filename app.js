@@ -68,6 +68,8 @@ const game1 = (teams, scores) => html`
 `;
 
 const getPastScores = async (id, teams) => {
+
+  render(html``, vm.entryHistory);
   const t = await (await fetch(`${uri}/date/'${vm.date}'/game/'${id}'`)).json();
 
   render(t.map(x => game1(teams, x.scores)), vm.entryHistory);
