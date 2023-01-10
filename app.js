@@ -44,9 +44,9 @@ const  saveScore = async () => {
     body: JSON.stringify(score)
   });
 
-  vm.doEntry()
 
   vm.setScores(vm.entryId, score.scores);
+  vm.doEntry()
 }
 
 
@@ -91,7 +91,7 @@ const title = (s) => html`
 
 const schedule = 
 `
-h	Jan 12 2023		
+h	Jan x 2023		
 d	20230102		
 t	8:15 OLQW		
 g	Karen	Derek	N
@@ -165,6 +165,7 @@ render(dom, document.body);
 const arrayMap = (...args) => Array.prototype.map.call(...args);
 
 vm.stage = -1;
+vm.entryStage = -1;
 vm.mainPage = document.getElementById("mainPage");
 vm.entryPage = document.getElementById("entryPage");
 vm.entryTeams = vm.entryPage.getElementsByClassName('entryTeam');
@@ -178,8 +179,8 @@ vm.setScores = (id, scores) => {
 
 
 vm.doEntry = (id, teams) => {
+  vm.entryId = id;
   if (id) {
-    vm.entryId = id;
     arrayMap(vm.entryTeams, (x, i) => x.innerHTML = teams[i]);
     arrayMap(vm.entryScores, x => x.value = '');
 
@@ -187,7 +188,9 @@ vm.doEntry = (id, teams) => {
     vm.entryPage.style.display = 'block';
     vm.entryScores[0].focus();
 
-    vm.getPastScores(id, teams);
+    vm.entryStage = -1;
+    render(html``, vm.entryHistory);
+    vm.getPastScores(id);
   } else {
     vm.entryPage.style.display = 'none';
     vm.mainPage.style.visibility = '';
@@ -206,18 +209,17 @@ vm.getScores = async () => {
 }
 
 
-
-
-
-
-vm.getPastScores = async (id, teams) => {
-  render(html``, vm.entryHistory);
-  const t = await (await fetch(`${uri}/date/'${vm.date}'/game/'${id}/'${vm.stage}'`)).json();
-  vm.stage = t.stage;
-  if (t.data) render(t.data.map(x => game1(teams, x.scores)), vm.entryHistory);
+vm.getPastScores = async (id) => {
+  const t = await (await fetch(`${uri}/date/'${vm.date}'/game/'${id}'/${vm.entryStage}`)).json();
+  vm.entryStage = t.stage;
+  if (t.data) 
+    render(t.data.map(x => game1(["",""], x.scores)), vm.entryHistory);
 }
-
 
 await vm.getScores();
 
-setInterval(async () => await vm.getScores(), 5000);
+setInterval(async () => {
+  await vm.getScores();
+  const id = vm.entryId;
+  if (id) await vm.getPastScores(vm.entryId);
+}, 5000);
