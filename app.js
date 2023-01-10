@@ -28,8 +28,8 @@ const scorePage = html`
     
 `;
 
-const uri = "http://localhost:3000";
-//const uri = "https://node12351232153234.azurewebsites.net"
+//const uri = "http://localhost:3000";
+const uri = "https://node12351232153234.azurewebsites.net"
 
 const  saveScore = async () => {
 
@@ -89,7 +89,7 @@ const game = (id, teams) => html`
 `;
 
 const heading = (s) => html`
-  <div class=${tw`rounded-2xl bg-red-400 p-4 m-4 text-6xl text-center font-semibold`}>${s}</div>
+  <div class=${tw`p-4 text-6xl text-center font-semibold`}>${s}</div>
 `;
 
 const schedule = 
