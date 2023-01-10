@@ -28,8 +28,8 @@ const scorePage = html`
     
 `;
 
-const uri = "http://localhost:3000";
-//const uri = "https://node12351232153234.azurewebsites.net"
+//const uri = "http://localhost:3000";
+const uri = "https://node12351232153234.azurewebsites.net"
 
 const  saveScore = async () => {
 
@@ -91,7 +91,7 @@ const title = (s) => html`
 
 const schedule = 
 `
-h	Jan x 2023		
+h	Jan y 2023		
 d	20230102		
 t	8:15 OLQW		
 g	Karen	Derek	N
