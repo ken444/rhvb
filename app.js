@@ -5,38 +5,38 @@ import { html, render } from 'https://unpkg.com/lit-html?module';
 
 import { tw } from 'https://cdn.skypack.dev/twind';
 
-const scoreLine = (t1, id) => html`
-  <div class=${tw`p-4 m-4 rounded-3xl bg-red-400 grid grid-cols-3 items-center text-8xl `}>
-    <div class=${tw`col-span-2`}>${t1}</div>
-    <input id = ${id} autofocus class=${tw`rounded-3xl`} type="number">
+const scoreLine = html`
+  <div class=${tw`p-4 m-4 rounded-3xl bg-red-400 grid items-center text-8xl `}>
+    <div class=${tw`p-4 entryTeam`}></div>
+    <input autofocus class=${tw`rounded-3xl m-4 p-0 w-1/2 place-self-end text-right entryScore`} type="number">
   </div>
 `;
 
-const scorePage = (t1, t2, id) => html`
+const scorePage = html`
   <div class=${tw`grid`}>
-    <i class=${tw`material-icons text-8xl m-4 p-4`} @click=${()=> rerender(null)}>close</i>
+    <i class=${tw`material-icons text-8xl m-4 p-4`} @click=${()=> vm.doEntry()}>close</i>
+    <div class=${tw`grid grid-cols-2`}>
+      ${scoreLine}
+      ${scoreLine}
+    </div>
   
-    ${scoreLine(t1, "in1")}
-    ${scoreLine(t2, "in2")}
-  
-
-      <button tabindex="0" class=${tw`text-4xl m-8 p-8 font-semibold text-white bg-blue-500 border-b-4 border-blue-700 rounded-3xl
-        shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${()=> rerender(null)}>Save</button>
-
+    <button tabindex="0" class=${tw`text-4xl m-8 p-8 font-semibold text-white bg-blue-500 border-b-4 border-blue-700
+      rounded-3xl shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${async ()=> saveScore()}>Save</button>
   </div>
+  
+  <div id="history"></div>
+    
 `;
 
-//const uri = "http://localhost:3000";
-const uri = "https://node12351232153234.azurewebsites.net"
+const uri = "http://localhost:3000";
+//const uri = "https://node12351232153234.azurewebsites.net"
 
-const  saveScore = async (id) => {
-
+const  saveScore = async () => {
 
   let score = {
-    date: date1,
-    game: id,
-    score1: document.getElementById("in1").value,
-    score2: document.getElementById("in2").value
+    date: vm.date,
+    game: vm.entryId,
+    scores: [vm.entryScores[0].value, vm.entryScores[1].value]
   };
   const response = await fetch(uri, {
     method: 'POST',
@@ -44,10 +44,10 @@ const  saveScore = async (id) => {
     body: JSON.stringify(score)
   });
 
-  rerender(null);
-  return (await response.json());
-}
+  vm.doEntry()
 
+  vm.setScores(vm.entryId, score.scores);
+}
 
 
 {/* <a class=${tw`text-gray-700 hover:text-red-500 px-2 py-1 font-bold text-white bg-red-500 rounded-full shadow-md hover:bg-red-600 hover:text-red-800`} @click=${() => {
@@ -59,62 +59,42 @@ const  saveScore = async (id) => {
 </svg> */}
 
 
-
-const dom1 = () => html`
-<div class=${tw`grid`}>
-  <div>
-    Enter score:
-    <input type="number" value=${name1}>
-  </div>
-  <button @click=${async () => document.getElementById("demo1").innerHTML = await userAction1()
-      }
-    }>post</button>
-  <div id="demo1" class=${tw`place-self-center`}>01</div>
-</div>
-`;
-
-const dom2 = () => html`
-  <div class=${tw`grid`}>
-    <button @click=${
-      async () => 
-        document.getElementById("demo2").innerHTML = await (await fetch(uri + "/date/'20220101'")).text()
-  }>get</button>
-    <div id="demo2" class=${tw`place-self-center`}>01</div>
-  </div>
-`;
-
-const dom3 = () => html`
-  <div class=${tw`border-black border-2 text-red-600 grid`}>
-    <button @click=${
-      async () => 
-        document.getElementById("demo3").innerHTML = await (await fetch(uri + "/date/'20220101'/game/'815 Philip-Lev'")).text()
-    } >get</button>
-    <div id="demo3" class=${tw`place-self-center`}>01</div>
-  </div>
-`;
-
-
-const game = (t1, t2, id) => html`
-  <div id="${id}" @click=${() => rerender(dom(scorePage(t1,t2,id)))}
-    class=${tw`rounded-2xl bg-blue-400 p-4 m-4 grid grid-flow-col grid-cols-7 items-center`}>
-    <div class=${tw`col-span-2`}>${t1}</div>
-    <div class=${tw`justify-self-end score1`}></div>
+const game1 = (teams, scores) => html`
+  <div class=${tw`text-8xl rounded-2xl bg-blue-400 p-4 m-4 grid grid-flow-col grid-cols-7 items-center game`}>
+    ${team(teams[0], scores[0])}
     <div></div>
-    <div class=${tw`col-span-2`}>${t2}</div>
-    <div class=${tw`justify-self-end score2`}></div>
+    ${team(teams[1], scores[1])}
+  </div>
+`;
+
+const getPastScores = async (id, teams) => {
+  const t = await (await fetch(`${uri}/date/'${vm.date}'/game/'${id}'`)).json();
+
+  render(t.map(x => game1(teams, x.scores)), vm.entryHistory);
+
+}
+
+const team = (t, s) => html`
+  <div class=${tw`col-span-2 team`}>${t}</div>
+  <div class=${tw`justify-self-end score`}>${s}</div>
+`;
+
+const game = (id, teams) => html`
+  <div @click=${() => vm.doEntry(id, teams)}
+    class=${tw`rounded-2xl bg-blue-400 p-4 m-4 grid grid-flow-col grid-cols-7 items-center game`}>
+    ${team(teams[0])}
+    <div></div>
+    ${team(teams[1])}
   </div>
 `;
 
 const heading = (s) => html`
-  <div
-    class=${tw`rounded-2xl bg-red-400 p-4 m-4 text-6xl text-center font-semibold `}>
-    <div class=${tw``}>${s}</div>
-  </div>
+  <div class=${tw`rounded-2xl bg-red-400 p-4 m-4 text-6xl text-center font-semibold`}>${s}</div>
 `;
 
 const schedule = 
 `
-d	20230112		
+d	20230102		
 t	8:15 OLQW		
 g	Karen	Derek	N
 g	Pao	Lev	C
@@ -154,38 +134,66 @@ t	9:55 SP
 g	Aven	Wayne	
 `
 
-let date1 = '';
+let vm = {};
+
 let gameIndex = 0;
-const scheduleArray = schedule.split('\n');
-const htmlArray = scheduleArray.map((element) => {
-  let r = element.split('\t');
-  switch(r[0]) {
+const htmlArray = schedule.split('\n').map((element) => {
+  let entry = element.split('\t');
+  switch(entry[0]) {
     case 'g':
-      return game(r[1], r[2], `game${gameIndex++}`)
+      return game(`${gameIndex++}`, [entry[1], entry[2]])
     case 't':
-      return heading(r[1]);
+      return heading(entry[1]);
     case 'd':
-      date1 = r[1]
+      vm.date = entry[1]
   }
 })
-
-const vis = (v) => v ? "" : "hidden";
 
 const mainPage = html`
   <div class=${tw`grid text-7xl`}> ${htmlArray} </div>
 `;
 
-const dom = (page2) => html`
-  <main class=${tw``}>
-    <div class=${tw`${vis(page2)}`}> ${page2} </div>
-    <div class=${tw`${vis(!page2)}`}> ${mainPage} </div>
-  </main>
+const dom = html`
+  <div id="mainPage" class=${tw`${''}`}> ${mainPage} </div>
+  <div id="entryPage" class=${tw`${'fixed inset-0 hidden'}`}> ${scorePage} </div>
 `;
 
-const rerender = page => {
- render(dom(page), document.body);
- if (page) document.getElementById("in1").focus();
+render(dom, document.body);
+
+const arrayMap = (...args) => Array.prototype.map.call(...args);
+
+vm.mainPage = document.getElementById("mainPage");
+vm.entryPage = document.getElementById("entryPage");
+vm.entryTeams = vm.entryPage.getElementsByClassName('entryTeam');
+vm.entryScores = vm.entryPage.getElementsByClassName('entryScore');
+vm.entryHistory = document.getElementById("history");
+vm.gameScores = arrayMap(vm.mainPage.getElementsByClassName('game'), s => s.getElementsByClassName('score'));
+
+vm.setScores = (id, scores) => {
+  scores.map((v,i) => vm.gameScores[id][i].innerHTML = v);
 }
 
-rerender(null);
+vm.getScores = async () => {
+  const t = await (await fetch(`${uri}/date/'${vm.date}'`)).json();
+  t.map(v=>vm.setScores(v.game, v.scores));
+}
+
+vm.doEntry = (id, teams) => {
+  if (id) {
+    vm.entryId = id;
+    arrayMap(vm.entryTeams, (x, i) => x.innerHTML = teams[i]);
+    arrayMap(vm.entryScores, x => x.value = '');
+
+    vm.mainPage.style.visibility = 'hidden';
+    vm.entryPage.style.display = 'block';
+    vm.entryScores[0].focus();
+
+    getPastScores(id, teams);
+  } else {
+    vm.entryPage.style.display = 'none';
+    vm.mainPage.style.visibility = '';
+  }
+}
+
+await vm.getScores();
 
