@@ -1,6 +1,6 @@
 const schedule1 = 
 `
-h	Thursday Jan y 2023		
+h	Thursday Jan z 2023		
 d	20230102		
 t	8:15 OLQW		
 g	Karen	Derek	N

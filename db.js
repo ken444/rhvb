@@ -4,7 +4,6 @@ export default function db() {
 
     const devuri = "http://localhost:3000";
     //const devuri = puri;
-
  
     const uri = window.location.hostname == '127.0.0.1' ?  devuri : puri;
     
