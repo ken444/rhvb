@@ -4,8 +4,6 @@ export default function vm(date, renderPast) {
 
   const db = createdb();
 
-  let entryId = '';
-
   const mainPage = document.getElementById("mainPage");
   const entryPage = document.getElementById("entryPage");
   const entryTeams = Array.from(entryPage.getElementsByClassName('entryTeam'));
@@ -21,15 +19,15 @@ export default function vm(date, renderPast) {
   function renderPast1(s = null) { renderPast(s, entryHistory) };
 
   async function getPastScores(force = false) {
-    const id = entryId;
+    const id = window.location.hash.substring(1);
     if (id) {
       const scores = await db.getPastScores(date, id, force);
       if (scores) renderPast1(scores);
     }
   };
 
-  async function showPage(id) {
-    entryId = id;
+  async function showPage() {
+    const id = window.location.hash.substring(1);
     if (id) {
       try {
         renderPast1();
@@ -50,15 +48,11 @@ export default function vm(date, renderPast) {
     }
   };
 
-  async function gotoPage(id) {
-    window.history.pushState({}, "", id ? `/#${id}` : '/');
-    showPage(id);
-  };
-
   async function saveScore() {
+    const id = window.location.hash.substring(1);
     const scores = entryScores.map(v => v.value)
-    db.saveScore(date, entryId, scores);
-    setScores(entryId, scores);
+    db.saveScore(date, id, scores);
+    setScores(id, scores);
     history.back();
   };
 
@@ -66,7 +60,6 @@ export default function vm(date, renderPast) {
 
   return {
     showPage,
-    gotoPage,
     saveScore,
     getScores,
     getPastScores

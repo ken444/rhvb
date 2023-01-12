@@ -1,7 +1,6 @@
 import { html, render } from 'https://unpkg.com/lit-html?module';
 import { tw } from 'https://cdn.skypack.dev/twind';
 import schedule from "./schedule.js";
-
 import createvm from "./vm.js";
 
 const scoreLine = html`
@@ -13,9 +12,9 @@ const scoreLine = html`
 `;
 
 const pastScoreLine = (score) => html`
-<div class=${tw`m-4 rounded-3xl bg-red-400 grid items-center text-7xl`}>
-  <div class=${tw`rounded-3xl w-1/2 place-self-end text-right mx-8`}>${score}</div>
-</div>
+  <div class=${tw`m-4 rounded-3xl bg-red-400 grid items-center text-7xl`}>
+    <div class=${tw`rounded-3xl w-1/2 place-self-end text-right mx-8`}>${score}</div>
+  </div>
 `;
 
 const scorePage = html`
@@ -31,7 +30,14 @@ const scorePage = html`
   </div>
 `;
 
-const pastScores = (scores) => html`
+const pastScores = (s) => (!s || s.length == 0) ? null : html`
+  <div class=${tw`text-4xl p-3 italic text-center`}>
+    List of past score submissions (this should be normally be empty)
+  </div>
+  ${s?.map(x => pastScoresItem(x.scores))}
+`;
+
+const pastScoresItem = (scores) => html`
   <div class=${tw`grid grid-cols-2`}>
     ${scores.map(v => pastScoreLine(v))}
   </div>
@@ -43,7 +49,7 @@ const team = (t) => html`
 `;
 
 const game = (id, teams) => html`
-  <div @click=${async () => await vm.gotoPage(id)}
+  <div @click=${async () => await gotoPage(id)}
     class=${`${tw`rounded-2xl bg-blue-400 p-4 m-4 grid grid-flow-col grid-cols-7 items-center`} game`}>
     ${team(teams[0])}
     <div></div>
@@ -58,19 +64,24 @@ const title = (s) => html`<div class=${tw`text-4xl p-3 italic`}>${s}</div>`;
 const {htmlArray, date} = schedule(title, heading, game);
 
 const dom = html`
-  <div id="mainPage" class=${tw`grid text-8xl`}> ${htmlArray} </div>
+  <div id="mainPage" class=${tw`grid text-7xl`}> ${htmlArray} </div>
   <div id="entryPage" class=${tw`${'grid hidden'}`}> ${scorePage} </div>
 `;
 
 render(dom, document.body);
 
-function renderPast(s, e) { render(s?.map(x => pastScores(x.scores)), e); }
+function renderPast(s, e) { render(pastScores(s), e) };
 
 const vm = createvm(date, renderPast);
 
-window.addEventListener("popstate", async () => { await vm.showPage((window.location.hash).substring(1)); });
+window.addEventListener("popstate", async () => await vm.showPage());
 
-vm.showPage((window.location.hash).substring(1));
+async function gotoPage(id) {
+  window.history.pushState({}, '', id ? `/#${id}` : '/');
+  vm.showPage();
+};
+
+vm.showPage();
 
 await vm.getScores();
 
