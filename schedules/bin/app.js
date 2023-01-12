@@ -57,7 +57,7 @@ const game = (id, teams) => html`
   </div>
 `;
 
-const heading = (s) => html`<div class=${tw`text-6xl text-center font-semibold`}>${s}</div>`;
+const heading = (s) => html`<div class=${tw`text-5xl text-center font-semibold`}>${s}</div>`;
 
 const title = (s) => html`<div class=${tw`text-4xl p-3 italic`}>${s}</div>`;
 
