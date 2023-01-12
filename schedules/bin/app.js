@@ -77,7 +77,8 @@ const vm = createvm(date, renderPast);
 window.addEventListener("popstate", async () => await vm.showPage());
 
 async function gotoPage(id) {
-  window.history.pushState({}, '', id ? `/#${id}` : '/');
+  const path = window.location.pathname;
+  window.history.pushState({}, '', id ? `${path}#${id}` : '{path}');
   vm.showPage();
 };
 
