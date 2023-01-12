@@ -51,7 +51,7 @@ export default function vm(date, renderPast) {
   };
 
   async function gotoPage(id) {
-    window.history.pushState({}, "", id ? `/${id}` : '/');
+    window.history.pushState({}, "", id ? `/#${id}` : '/');
     showPage(id);
   };
 

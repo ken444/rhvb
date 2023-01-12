@@ -68,7 +68,9 @@ function renderPast(s, e) { render(s?.map(x => pastScores(x.scores)), e); }
 
 const vm = createvm(date, renderPast);
 
-window.addEventListener("popstate", async () => { await vm.showPage((window.location.pathname).substring(1)); });
+window.addEventListener("popstate", async () => { await vm.showPage((window.location.hash).substring(1)); });
+
+vm.showPage((window.location.hash).substring(1));
 
 await vm.getScores();
 

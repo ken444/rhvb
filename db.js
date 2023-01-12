@@ -2,8 +2,8 @@ export default function db() {
 
     const puri = "https://node12351232153234.azurewebsites.net";    
 
-    const devuri = "http://localhost:3000";
-    //const devuri = puri;
+    //const devuri = "http://localhost:3000";
+    const devuri = puri;
  
     const uri = window.location.hostname == '127.0.0.1' ?  devuri : puri;
     
