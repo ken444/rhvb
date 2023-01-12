@@ -14,7 +14,7 @@ export default function vm(date, renderPast) {
     teams: Array.from(s.getElementsByClassName('team'))
   }));
 
-  function setScores(id, scores) { gameScores[id].scores.map((v, i) => v.innerHTML = scores[i]); };
+  function setScores(id, scores) { gameScores[id]?.scores?.map((v, i) => v.innerHTML = scores?.[i] ); };
 
   function renderPast1(s = null) { renderPast(s, entryHistory) };
 
@@ -50,13 +50,13 @@ export default function vm(date, renderPast) {
 
   async function saveScore() {
     const id = window.location.hash.substring(1);
-    const scores = entryScores.map(v => v.value)
+    const scores = entryScores.map(v => v.value);
     db.saveScore(date, id, scores);
     setScores(id, scores);
     history.back();
   };
 
-  async function getScores() { (await db.getScores(date))?.map(v => setScores(v.game, v.scores)); };
+  async function getScores() { (await db.getScores(date))?.map(v => setScores(v?.game, v?.scores)); };
 
   return {
     showPage,

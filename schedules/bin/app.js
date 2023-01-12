@@ -32,9 +32,9 @@ const scorePage = html`
 
 const pastScores = (s) => (!s || s.length == 0) ? null : html`
   <div class=${tw`text-4xl p-3 italic text-center`}>
-    List of past score submissions (this should be normally be empty)
+    List of past score submissions (this should be normally have at most one submission)
   </div>
-  ${s?.map(x => pastScoresItem(x.scores))}
+  ${s.map(x => pastScoresItem(x.scores))}
 `;
 
 const pastScoresItem = (scores) => html`
