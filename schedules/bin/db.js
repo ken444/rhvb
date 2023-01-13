@@ -1,6 +1,6 @@
 export default function db() {
 
-    const puri = "https://node12351232153234.azurewebsites.net";    
+    const puri = "https://rhvb568.azurewebsites.net";    
 
     //const devuri = "http://localhost:3000";
     const devuri = puri;
@@ -21,7 +21,9 @@ export default function db() {
         },
 
         async getScores(date) {
-            const scores = await (await fetch(`${uri}/date/'${date}'/${stage1}`)).json();
+            //const scores = await (await fetch(`${uri}/date/'${date}'/${stage1}`)).json();
+            const scores1 = await fetch(`${uri}/date/'${date}'/${stage1}`);
+            const scores = await scores1.json();
             stage1 = scores.stage;
             return scores.data;
         },
