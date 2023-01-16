@@ -1,5 +1,6 @@
 {
     "configurations": [
+
         {
             "type": "pwa-msedge",
             "name": "Launch Microsoft Edge",
@@ -20,7 +21,7 @@
                 "--headless",
                 "--remote-debugging-port=9222"
             ],
-            "url": "http://127.0.0.1:5500/schedules/20230112",
+            "url": "http://127.0.0.1:5500/schedules/20230119.html",
             "presentation": {
                 "hidden": true
             }
@@ -29,7 +30,7 @@
             "type": "vscode-edge-devtools.debug",
             "name": "Open Edge DevTools",
             "request": "attach",
-            "url": "http://127.0.0.1:5500/schedules/20230112",
+            "url": "http://127.0.0.1:5500/schedules/20230119.html",
             "presentation": {
                 "hidden": true
             }
