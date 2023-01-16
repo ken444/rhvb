@@ -64,8 +64,10 @@ const title = (s) => html`<div class=${tw`text-4xl p-3 italic`}>${s}</div>`;
 const {htmlArray, date} = schedule(title, heading, game);
 
 const dom = html`
+<div class=${tw`mx-auto max-w-[1024px] min-w-[720px]`}>
   <div id="mainPage" class=${tw`grid text-7xl`}> ${htmlArray} </div>
   <div id="entryPage" class=${tw`${'grid hidden'}`}> ${scorePage} </div>
+</div>
 `;
 
 render(dom, document.body);
