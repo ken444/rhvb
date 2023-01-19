@@ -14,7 +14,7 @@ import { html, render } from 'https://unpkg.com/lit-html?module';
 // `;
 const dom = html`
 <div >
-  <div id="mainPage" > ${"hellow"} </div>
+  <div></div> hi </div>
 </div>
 `;
 
