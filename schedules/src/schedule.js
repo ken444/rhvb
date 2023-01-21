@@ -11,6 +11,8 @@ export default function schedule(title, heading, game) {
           return heading(entry[1]);
         case 'h':
           return title(entry[1]);
+        case 's':
+          return side(entry[1]);
         case 'd':
           date = entry[1];
       }

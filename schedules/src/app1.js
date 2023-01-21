@@ -57,7 +57,11 @@ const game = (id, teams) => html`
   </div>
 `;
 
-const side = (s) => html``;
+const side = (s) => html`
+  <div class=${`${tw`grid-cols-8 items-center`}`}>
+
+  </div>
+`;
 
 const heading = (s) => html`<div class=${tw`text-5xl text-center font-semibold`}>${s}</div>`;
 
