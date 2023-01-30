@@ -21,7 +21,6 @@ export default function db() {
         },
 
         async getScores(date) {
-            //const scores = await (await fetch(`${uri}/date/'${date}'/${stage1}`)).json();
             const scores1 = await fetch(`${uri}/date/'${date}'/${stage1}`);
             const scores = await scores1.json();
             stage1 = scores.stage;

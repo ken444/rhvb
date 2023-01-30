@@ -1,8 +1,8 @@
-import createdb from "./db.js";
+import createview from "./view.js";
 
-export default function vm(date, renderPast) {
-
-  const db = createdb();
+export default function vm() {
+  
+  window.view = createview();
 
   const mainPage = document.getElementById("mainPage");
   const entryPage = document.getElementById("entryPage");
@@ -14,23 +14,17 @@ export default function vm(date, renderPast) {
     teams: Array.from(s.getElementsByClassName('team'))
   }));
 
-  function setScores(id, scores) { gameScores[id]?.scores?.map((v, i) => v.innerHTML = scores?.[i] ); };
+  function setScores1(id, scores) { gameScores[id]?.scores?.map((v, i) => v.innerHTML = scores?.[i] ); };
 
-  function renderPast1(s = null) { renderPast(s, entryHistory) };
+  function setPastScores(s = null) { view.setPastScores(s, entryHistory) };
 
-  async function getPastScores(force = false) {
-    const id = window.location.hash.substring(1);
-    if (id) {
-      const scores = await db.getPastScores(date, id, force);
-      if (scores) renderPast1(scores);
-    }
-  };
+  let id = null;
 
-  async function showPage() {
-    const id = window.location.hash.substring(1);
+  async function setPage(game) {
+    id = game;
     if (id) {
       try {
-        renderPast1();
+        setPastScores();
 
         entryTeams.map((x, i) => x.innerHTML = gameScores[id].teams[i].innerHTML);
         entryScores.map(x => x.value = '');
@@ -39,7 +33,7 @@ export default function vm(date, renderPast) {
         entryPage.style.display = 'block';
         entryScores[0].focus();
 
-        await getPastScores(true);
+        await getPastScores(view, true);
       } catch {
       }
     } else {
@@ -48,22 +42,18 @@ export default function vm(date, renderPast) {
     }
   };
 
-  async function saveScore() {
-    const id = window.location.hash.substring(1);
-    const scores = entryScores.map(v => v.value);
-    db.saveScore(date, id, scores);
-    setScores(id, scores);
-    history.back();
-  };
+  const getPage = () => id;
 
-  async function getScores() { (await db.getScores(date))?.map(v => setScores(v?.game, v?.scores)); };
+  async function setScores(list) { await list?.map(v => setScores1(v?.game, v?.scores)); };
 
   return {
-    showPage,
-    saveScore,
-    getScores,
-    getPastScores
+    setPage,
+    setScores,
+    setPastScores,
+    getPage
   }
 
 }
 
+// state defined by scores, id from web address
+// stae
