@@ -6,7 +6,7 @@ import createvm from "./vm.js";
 const scoreLine = html`
   <div class=${tw`p-4 m-4 rounded-3xl bg-red-400 grid items-center text-8xl`}>
     <div class=${`${tw`p-4`} entryTeam`}></div>
-    <input autofocus class=${`${tw`rounded-3xl m-4 p-0 w-1/2 place-self-end text-right focus:ring-[16px]`} entryScore`}
+    <input autofocus class=${`${tw`rounded-3xl m-4 p-0 w-1/2 place-self-end text-right focus:ring-[32px]`} entryScore`}
       type="number">
   </div>
 `;
