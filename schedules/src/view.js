@@ -1,76 +1,77 @@
-import { html, render } from 'https://unpkg.com/lit-html?module';
+import { html, render, svg } from 'https://unpkg.com/lit-html?module';
 import { tw } from 'https://cdn.skypack.dev/twind';
 import schedule from "./schedule.js";
 
 export default function view() {
 
     const scoreLine = html`
-        <div class=${tw`p-4 m-4 rounded-3xl bg-red-400 grid items-center text-8xl`}>
-            <div class=${`${tw`p-4`} entryTeam`}></div>
-            <input autofocus class=${`${tw`rounded-3xl m-4 p-0 w-1/2 place-self-end text-right focus:ring-[16px]`} entryScore`}
-                type="number">
+        <div class=${tw`p-4 m-4 rounded-3xl bg-blue-400 grid text-7xl`}>
+            <div data-entryTeam class=${tw`p-4 truncate`}></div>
+            <input data-entryScore autofocus class=${tw`rounded-3xl m-4 p-0 w-1/2 justify-self-end text-right focus:ring-[20px]
+                focus:ring-offset-[4px] focus:ring-red-500`} type="number">
         </div>
     `;
 
     const pastScoreLine = (score) => html`
-        <div class=${tw`m-4 rounded-3xl bg-red-400 grid items-center text-7xl`}>
-            <div class=${tw`rounded-3xl w-1/2 place-self-end text-right mx-8`}>${score}</div>
-        </div>
+        <div class=${tw`m-2 py-2 px-8 rounded-3xl bg-blue-400 text-7xl text-right`}>${score}</div>
+    `;
+
+    const closeX = html`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke="black" />
+        </svg>
     `;
 
     const scorePage = html`
-        <div class=${tw`grid content-start`}>
-            <i class=${`${tw`text-8xl m-4 p-4`} material-icons`} @click=${() => controller?.mainPageReturn()}>close</i>
-            <div class=${tw`grid grid-cols-2`}>
-                ${scoreLine}
-                ${scoreLine}
-            </div>
-            <button tabindex="0" class=${tw`text-6xl m-8 p-8 font-semibold text-white bg-blue-500 border-b-4 border-blue-700
-                rounded-3xl shadow-md hover:bg-blue-600 hover:border-blue-800`} @click=${async () =>
-                    controller?.saveScore()}>Save</button>
-            <div id="history"></div>
+        <div class=${tw`w-1/6`} @click=${()=> controller?.gotoPage()}>${closeX}</div>
+        <div class=${tw`grid grid-flow-col auto-cols-fr`}>
+            ${scoreLine}
+            ${scoreLine}
+        </div>
+        <div tabindex="0" class=${tw`text-6xl text-center p-8 m-4 font-semibold text-white bg-blue-600 border-b-4
+            border-blue-800 rounded-3xl shadow-xl`} @click=${async ()=> controller?.saveScore()}>Save</div>
+        <div id="history"></div>
+    `;
+
+    const pastScoresItem = (scores) => html`
+        <div class=${tw`grid grid-flow-col auto-cols-fr`}>
+            ${scores.map(v => pastScoreLine(v))}
         </div>
     `;
 
     const pastScores = (s) => (!s || s.length == 0) ? null : html`
         <div class=${tw`text-4xl p-3 italic text-center`}>
-            List of past score submissions (unless an error was fixed, this should normally have at most one submission)
+            List of past score submissions (unless an error was corrected this should have at most one submission)
         </div>
         ${s.map(x => pastScoresItem(x.scores))}
     `;
 
-    const pastScoresItem = (scores) => html`
-        <div class=${tw`grid grid-cols-2`}>
-            ${scores.map(v => pastScoreLine(v))}
+    const team = (t, s) => html`
+        <div class=${tw`px-6 text-7xl flex pb-4`}>
+            <div data-team class=${tw`flex-1 overflow-ellipsis overflow-x-clip`}>${t}</div>
+            <div data-score>${s}</div>
         </div>
-    `;
-
-    const team = (t) => html`
-        <div class=${`${tw`col-span-2`} team`}>${t}</div>
-        <div class=${`${tw`justify-self-end`} score`}></div>
     `;
 
     const game = (id, teams) => html`
-        <div @click=${async () => await controller?.gotoPage(id)}
-            class=${`${tw`rounded-2xl bg-blue-400 p-4 m-4 grid grid-flow-col grid-cols-7 items-center`} game`}>
-            ${team(teams[0])}
-            <div></div>
-            ${team(teams[1])}
+        <div data-game class=${tw`rounded-2xl ${teams[3]} m-2`} @click=${async ()=> await controller?.gotoPage(id)} >
+            <div class=${tw`text-4xl italic font-bold tracking-widest text-white text-center`}>${teams[2]}</div>
+            <div class=${tw`grid grid-flow-col auto-cols-fr`}>
+                ${teams.slice(0, 2).map(x => team(x))}
+            </div>
         </div>
     `;
 
-    const side = (s) => html``;
-
-    const heading = (s) => html`<div class=${tw`text-5xl text-center font-semibold`}>${s}</div>`;
+    const heading = (s) => html`<div class=${tw`text-5xl text-center font-semibold text-blue-800`}>${s}</div>`;
 
     const title = (s) => html`<div class=${tw`text-4xl p-3 italic`}>${s}</div>`;
 
     const { htmlArray, date } = schedule(title, heading, game);
 
     const dom = html`
-        <div class=${tw`mx-auto max-w-[1024px] min-w-[720px]`}>
-            <div id="mainPage" class=${tw`grid text-7xl`}> ${htmlArray} </div>
-            <div id="entryPage" class=${tw`${'grid hidden'}`}> ${scorePage} </div>
+        <div class=${tw`mx-auto max-w-5xl min-w-[720px]`}>
+            <div id="mainPage" class=${tw`hidden`}> ${htmlArray} </div>
+            <div id="entryPage" class=${tw`hidden`}> ${scorePage} </div>
         </div>
     `;
 
