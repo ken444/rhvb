@@ -12,11 +12,11 @@ export default function db() {
 
     return {
 
-        async saveScore(date, game, scores) {
+        async saveScore(x) {
             await fetch(uri, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json;charset=utf-8' },
-                body: JSON.stringify({ date, game, scores })
+                body: JSON.stringify(x)
             });
         },
 

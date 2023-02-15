@@ -6,7 +6,7 @@ export default function schedule(title, heading, game) {
       let entry = e.split('\t');
       switch (entry[0]) {
         case 'g':
-          return game(`${gameIndex++}`, [entry[1], entry[2]])
+          return game(`${gameIndex++}`, entry.slice(1))
         case 't':
           return heading(entry[1]);
         case 'h':

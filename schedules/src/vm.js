@@ -4,56 +4,51 @@ export default function vm() {
   
   window.view = createview();
 
-  const mainPage = document.getElementById("mainPage");
-  const entryPage = document.getElementById("entryPage");
-  const entryTeams = Array.from(entryPage.getElementsByClassName('entryTeam'));
-  const entryScores = Array.from(entryPage.getElementsByClassName('entryScore'));
-  const entryHistory = document.getElementById("history");
-  const gameScores = Array.from(mainPage.getElementsByClassName('game')).map(s => ({
-    scores: Array.from(s.getElementsByClassName('score')),
-    teams: Array.from(s.getElementsByClassName('team'))
+  const mainPage = document.querySelector("#mainPage");
+  const entryPage = document.querySelector("#entryPage");
+  const entryTeams = Array.from(entryPage.querySelectorAll('[data-entryTeam]'));
+  const entryScores = Array.from(entryPage.querySelectorAll('[data-entryScore]'));
+  const entryHistory = document.querySelector("#history");
+  const gameScores = Array.from(mainPage.querySelectorAll('[data-game]')).map(s => ({
+    scores: Array.from(s.querySelectorAll('[data-score]')),
+    teams: Array.from(s.querySelectorAll('[data-team]'))
   }));
-
-  function setScores1(id, scores) { gameScores[id]?.scores?.map((v, i) => v.innerHTML = scores?.[i] ); };
-
-  function setPastScores(s = null) { view.setPastScores(s, entryHistory) };
 
   let id = null;
 
-  async function setPage(game) {
+  function setPage(game) {
     id = game;
     if (id) {
       try {
-        setPastScores();
-
-        entryTeams.map((x, i) => x.innerHTML = gameScores[id].teams[i].innerHTML);
-        entryScores.map(x => x.value = '');
-
         mainPage.style.display = 'none';
         entryPage.style.display = 'block';
         entryScores[0].focus();
-
-        await getPastScores(view, true);
       } catch {
       }
     } else {
       entryPage.style.display = 'none';
-      mainPage.style.display = '';
+      mainPage.style.display = 'block';
     }
   };
 
-  const getPage = () => id;
+  const getTeams = (g) => gameScores[g].teams.map((x) => x.innerHTML);
 
-  async function setScores(list) { await list?.map(v => setScores1(v?.game, v?.scores)); };
+  const setEntryTeams = (g) => {
+    view.setPastScores(null, entryHistory);
+    entryTeams.map((x, i) => x.innerHTML = getTeams(g)[i]);
+    entryScores.map(x => x.value = '');
+  }
 
   return {
+    setScores: (s) => gameScores[s.game]?.scores?.map((v, i) => v.innerHTML = s.scores?.[i]),
+    setPastScores: (s = null) => view.setPastScores(s, entryHistory),
+    getPage: () => id,
     setPage,
-    setScores,
-    setPastScores,
-    getPage
+    getEntry: () => ({date: view.date, game: id, scores: entryScores.map(v => v.value) }),
+    setEntryTeams,
   }
 
 }
 
 // state defined by scores, id from web address
-// stae
+
