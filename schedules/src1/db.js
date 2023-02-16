@@ -12,16 +12,15 @@ export default function db() {
 
     return {
 
-        async saveScore(date, game, scores) {
+        async saveScore(x) {
             await fetch(uri, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json;charset=utf-8' },
-                body: JSON.stringify({ date, game, scores })
+                body: JSON.stringify(x)
             });
         },
 
         async getScores(date) {
-            //const scores = await (await fetch(`${uri}/date/'${date}'/${stage1}`)).json();
             const scores1 = await fetch(`${uri}/date/'${date}'/${stage1}`);
             const scores = await scores1.json();
             stage1 = scores.stage;
