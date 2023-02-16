@@ -46,7 +46,7 @@ export default function view() {
     `;
 
     const team = (t, s) => html`
-        <div class="px-6 text-7xl flex">
+        <div class="px-6 text-6xl flex">
             <div data-team class="pb-4 flex-1 truncate">${t}</div>
             <div data-score>${s}</div>
         </div>
