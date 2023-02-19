@@ -1,3 +1,4 @@
+//import { html, render, svg } from 'https://cdn.skypack.dev/lit-html';
 import { html, render, svg } from 'https://unpkg.com/lit-html?module';
 import schedule from "./schedule.js";
 
@@ -6,8 +7,9 @@ export default function view() {
     const scoreLine = html`
         <div class="p-4 m-4 rounded-3xl bg-blue-400 grid text-7xl">
             <div data-entryTeam class="p-4 truncate"></div>
-            <input data-entryScore autofocus class="rounded-3xl m-4 p-0 w-1/2 justify-self-end text-right focus:ring-[20px]
-                focus:ring-offset-[4px] focus:ring-red-500" type="number">
+            <input type="number" title="entryScore" data-entryScore autofocus 
+                class="form-input text-7xl rounded-3xl m-4 p-0 w-1/2 justify-self-end text-right 
+                focus:(ring-[20px] ring-offset-8 ring-red-500)">
         </div>
     `;
 
