@@ -1,5 +1,6 @@
 //import { html, render, svg } from 'https://cdn.skypack.dev/lit-html';
-import { html, render, svg } from 'https://unpkg.com/lit-html?module';
+//import { html, render, svg } from 'https://unpkg.com/lit-html?module';
+import { html, render, svg } from '/node_modules/lit-html/lit-html.js';
 import schedule from "./schedule.js";
 
 export default function view() {

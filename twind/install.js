@@ -11,4 +11,4 @@ install({
 
 // npm install @twind/core @twind/preset-autoprefix @twind/preset-tailwind @twind/preset-tailwind-forms
 // npm install esbuild
-// node_modules/.bin/esbuild.cmd src/twindInstall.js --bundle --outfile=src/twind1.js
+// node_modules/.bin/esbuild.cmd twind/install.js --bundle --outfile=twind/twind.js
