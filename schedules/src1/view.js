@@ -3,7 +3,7 @@ import schedule from "./schedule.js";
 
 export default function view() {
 
-    const teamNameStyle = "font-medium text-4xl leading-none";
+    const teamNameStyle = "font-medium text-3xl leading-none";
 
     const scoreLine = html`
         <div class="m-2 rounded-xl bg-blue-400 grid ${teamNameStyle}">
@@ -58,7 +58,7 @@ export default function view() {
 
     const game = (id, teams) => html`
         <div data-game class="rounded-xl ${teams[3]} m-1" @click=${async () => await controller?.gotoPage(id)} >
-            <div class="text-xl italic font-bold tracking-widest text-white text-center leading-none">${teams[2]}</div>
+            <div class="text-lg italic font-bold tracking-widest text-white text-center leading-none">${teams[2]}</div>
             <div class="grid grid-flow-col auto-cols-fr">
                 ${teams.slice(0, 2).map(x => team(x))}
             </div>
