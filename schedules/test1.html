@@ -5,12 +5,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>RHVB</title>
+    <script type="importmap">
+        {
+            "imports": {
+                "@twind/core": "/node_modules/@twind/core/core.js",
+                "style-vendorizer": "/node_modules/style-vendorizer/dist/esm/bundle.min.mjs",
+                "@twind/preset-tailwind/colors": "/node_modules/@twind/preset-tailwind/colors.js",
+                "@twind/preset-tailwind/defaultTheme": "/node_modules/@twind/preset-tailwind/defaultTheme.js"
+            },
+            "scopes": {
+                "/node_modules": {
+                }
+            }
+        }
+    </script>
     <script type="module">
         window.schedule =
             `
 
 
-h	test1			
+h	test12			
 d	test1			
 t	8:15 PM			
 g	Karen	Charis	OLQW North	bg-blue-400
@@ -53,8 +67,11 @@ g	Anthony	Wayne	Silver Pines	bg-red-400
 
 `
     </script>
+
     <!-- <script src="https://cdn.twind.style" crossorigin></script> -->
-    <script src="src1/twind1.js" crossorigin></script>
+    <!-- <script src="../twind/twind.js"></script> -->
+
+    <script type="module" src="src1/twind.js"></script>
     <script type="module" src="src1/app.js"></script>
 </head>
 
