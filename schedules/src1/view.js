@@ -1,21 +1,20 @@
-//import { html, render, svg } from 'https://cdn.skypack.dev/lit-html';
-//import { html, render, svg } from 'https://unpkg.com/lit-html?module';
 import { html, render, svg } from '/node_modules/lit-html/lit-html.js';
 import schedule from "./schedule.js";
 
 export default function view() {
 
+    const teamNameStyle = "font-medium text-4xl leading-none";
+
     const scoreLine = html`
-        <div class="p-4 m-4 rounded-3xl bg-blue-400 grid text-7xl">
-            <div data-entryTeam class="p-4 truncate"></div>
-            <input type="number" title="entryScore" data-entryScore autofocus 
-                class="form-input text-7xl rounded-3xl m-4 p-0 w-1/2 justify-self-end text-right 
-                focus:(ring-[20px] ring-offset-8 ring-red-500)">
+        <div class="m-2 rounded-xl bg-blue-400 grid ${teamNameStyle}">
+            <div data-entryTeam class="p-2 truncate"></div>
+            <input type="number" title="entryScore" data-entryScore autofocus class="form-input rounded-xl m-4 w-1/2 justify-self-end text-right ${teamNameStyle}
+                        focus:(ring-8 ring-offset-4 ring-red-500)">
         </div>
     `;
 
     const pastScoreLine = (score) => html`
-        <div class="m-2 py-2 px-8 rounded-3xl bg-blue-400 text-7xl text-right">${score}</div>
+        <div class="m-2 py-2 px-8 rounded-xl bg-blue-400 text-3xl text-right">${score}</div>
     `;
 
     const closeX = html`
@@ -25,14 +24,16 @@ export default function view() {
     `;
 
     const scorePage = html`
-        <div class="w-1/6" @click=${()=> controller?.gotoPage()}>${closeX}</div>
-        <div class="grid grid-flow-col auto-cols-fr">
-            ${scoreLine}
-            ${scoreLine}
-        </div>
-        <div tabindex="0" class="text-6xl text-center p-8 m-4 font-semibold text-white bg-blue-600 border-b-4
-            border-blue-800 rounded-3xl shadow-xl" @click=${async ()=> controller?.saveScore()}>Save</div>
-        <div id="history"></div>
+    <div class="grid mx-4">
+        <div class="w-1/6 justify-self-end" @click=${() => controller?.gotoPage()}>${closeX}</div>
+    </div>
+    <div class="grid grid-flow-col auto-cols-fr">
+        ${scoreLine}
+        ${scoreLine}
+    </div>
+    <div tabindex="0" class="text-4xl text-center p-4 m-4 font-semibold text-white bg-blue-600 border-b-4
+                border-blue-800 rounded-3xl shadow-xl" @click=${async () => controller?.saveScore()}>Save</div>
+    <div id="history"></div>
     `;
 
     const pastScoresItem = (scores) => html`
@@ -42,36 +43,36 @@ export default function view() {
     `;
 
     const pastScores = (s) => (!s || s.length == 0) ? null : html`
-        <div class="text-4xl p-3 italic text-center">
+        <div class="text-lg p-2 italic text-center leading-tight">
             List of past score submissions (unless an error was corrected this should have at most one submission)
         </div>
         ${s.map(x => pastScoresItem(x.scores))}
     `;
 
     const team = (t, s) => html`
-        <div class="px-6 text-6xl flex">
-            <div data-team class="pb-4 flex-1 truncate">${t}</div>
+        <div class="px-3 ${teamNameStyle} flex">
+            <div data-team class="pb-2 flex-1 truncate">${t}</div>
             <div data-score>${s}</div>
         </div>
     `;
 
     const game = (id, teams) => html`
-        <div data-game class="rounded-2xl ${teams[3]} m-2" @click=${async ()=> await controller?.gotoPage(id)} >
-            <div class="text-4xl italic font-bold tracking-widest text-white text-center">${teams[2]}</div>
+        <div data-game class="rounded-xl ${teams[3]} m-1" @click=${async () => await controller?.gotoPage(id)} >
+            <div class="text-xl italic font-bold tracking-widest text-white text-center leading-none">${teams[2]}</div>
             <div class="grid grid-flow-col auto-cols-fr">
                 ${teams.slice(0, 2).map(x => team(x))}
             </div>
         </div>
     `;
 
-    const heading = (s) => html`<div class="text-5xl text-center font-semibold text-blue-800">${s}</div>`;
+    const heading = (s) => html`<div class="text-lg text-center font-bold text-blue-800">${s}</div>`;
 
-    const title = (s) => html`<div class="text-4xl p-3 italic">${s}</div>`;
+    const title = (s) => html`<div class="text-xl px-4 italic">${s}</div>`;
 
     const { htmlArray, date } = schedule(title, heading, game);
 
     const dom = html`
-        <div class="mx-auto max-w-5xl min-w-[720px]">
+        <div class="mx-auto max-w-screen-sm">
             <div id="mainPage" class="hidden"> ${htmlArray} </div>
             <div id="entryPage" class="hidden"> ${scorePage} </div>
         </div>
