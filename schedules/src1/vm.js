@@ -6,12 +6,15 @@ export default function vm() {
 
   const mainPage = document.querySelector("#mainPage");
   const entryPage = document.querySelector("#entryPage");
+  const entryGame = document.querySelector("#entryGame");
   const entryTeams = Array.from(entryPage.querySelectorAll('[data-entryTeam]'));
   const entryScores = Array.from(entryPage.querySelectorAll('[data-entryScore]'));
   const entryHistory = document.querySelector("#history");
   const gameScores = Array.from(mainPage.querySelectorAll('[data-game]')).map(s => ({
     scores: Array.from(s.querySelectorAll('[data-score]')),
-    teams: Array.from(s.querySelectorAll('[data-team]'))
+    teams: Array.from(s.querySelectorAll('[data-team]')),
+    // location: s.querySelector('[data-location]'),
+    // time: s.closest('[data-heading')
   }));
 
   let id = null;

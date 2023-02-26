@@ -29,6 +29,8 @@ export default function controller() {
     async function setPage(game) {
         if (game) {
             try {
+                //vm.entryGame window.getComputedStyle( document.body ,null).getPropertyValue('background-color')
+                
                 vm.setEntryTeams(game);
                 vm.setPage(game);
                 await updatePastScores(true);
