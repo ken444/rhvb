@@ -6,7 +6,7 @@ export default function view() {
     const teamNameStyle = "font-medium text-3xl leading-none";
 
     const scoreLine = html`
-        <div class="m-2 bg-blue-400 rounded-xl grid ${teamNameStyle}">
+        <div class="m-2 rounded-xl grid ${teamNameStyle}">
             <div data-entryTeam class="p-2 truncate"></div>
             <input type="number" title="entryScore" data-entryScore autofocus class="form-input rounded-xl m-4 w-1/2 justify-self-end text-right ${teamNameStyle}
                                         focus:(ring-8 ring-offset-4 ring-red-500)">
@@ -25,16 +25,17 @@ export default function view() {
 
     const scorePage = html`
         <div class="grid mx-4">
+            <p></p>
             <div class="w-1/6 justify-self-end" @click=${() => controller?.gotoPage()}>${closeX}</div>
         </div>
-        <div id="entryGame" class="grid">
-            <!-- <div data-entryheading class="text-lg italic font-bold tracking-widest text-white text-center">"ji"</div> -->
+        <div id="entryGame" class="grid rounded-xl m-2">
+            <div data-entryheading class="text-lg italic font-bold tracking-widest text-white text-center"></div>
             <div class="grid grid-flow-col auto-cols-fr">
                 ${scoreLine}
                 ${scoreLine}
             </div>
         </div>
-        <div tabindex="0" class="text-4xl text-center p-4 m-4 font-semibold text-white bg-blue-600 border-b-4
+        <div data-button tabindex="0" class="text-4xl text-center p-4 m-4 font-semibold text-white bg-blue-600 border-b-4
                                     border-blue-800 rounded-3xl shadow-xl" @click=${async () => controller?.saveScore()}>Save
         </div>
         <div id="history"></div>
@@ -61,16 +62,15 @@ export default function view() {
     `;
 
     const game = (id, teams) => html`
-        <div data-game class="rounded-xl ${teams[3]} m-1" @click=${async () => await controller?.gotoPage(id)} >
-            <div data-location class="text-lg italic font-bold tracking-widest text-white text-center leading-none">${teams[2]}
-            </div>
+        <div data-game = ${teams[3]} class="rounded-xl ${teams[3]} m-1" @click=${async () => await controller?.gotoPage(id)} >
+            <div data-gamename class="text-lg italic font-bold tracking-widest text-white text-center leading-none">${teams[2]}</div>
             <div class="grid grid-flow-col auto-cols-fr">
                 ${teams.slice(0, 2).map(x => team(x))}
             </div>
         </div>
     `;
 
-    const heading = (s) => html`<div data-heading class="text-lg text-center font-bold text-blue-800">${s}</div>`;
+    const heading = (s) => html`<div data-heading class="text-xs text-end font-bold text-blue-300 h-3"></div>`;
 
     const title = (s) => html`<div class="text-xl px-4 italic">${s}</div>`;
 
@@ -78,8 +78,8 @@ export default function view() {
 
     const dom = html`
         <div class="mx-auto max-w-screen-sm">
-            <div id="mainPage" class="hidden"> ${htmlArray} </div>
-            <div id="entryPage" class="hidden"> ${scorePage} </div>
+            <div id="mainPage" style="display: none"> ${htmlArray} </div>
+            <div id="entryPage" style="display: none"> ${scorePage} </div>
         </div>
     `;
 

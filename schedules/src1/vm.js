@@ -7,14 +7,15 @@ export default function vm() {
   const mainPage = document.querySelector("#mainPage");
   const entryPage = document.querySelector("#entryPage");
   const entryGame = document.querySelector("#entryGame");
+  const entryHeading = document.querySelector("[data-entryheading]");
   const entryTeams = Array.from(entryPage.querySelectorAll('[data-entryTeam]'));
   const entryScores = Array.from(entryPage.querySelectorAll('[data-entryScore]'));
   const entryHistory = document.querySelector("#history");
   const gameScores = Array.from(mainPage.querySelectorAll('[data-game]')).map(s => ({
     scores: Array.from(s.querySelectorAll('[data-score]')),
     teams: Array.from(s.querySelectorAll('[data-team]')),
-    // location: s.querySelector('[data-location]'),
-    // time: s.closest('[data-heading')
+    game: s.querySelector('[data-gamename]'),
+    color: s
   }));
 
   let id = null;
@@ -40,6 +41,10 @@ export default function vm() {
     view.setPastScores(null, entryHistory);
     entryTeams.map((x, i) => x.innerHTML = getTeams(g)[i]);
     entryScores.map(x => x.value = '');
+    const x = gameScores[g];
+    entryHeading.innerHTML = x.game.innerHTML;
+    const cc = window.getComputedStyle(x.color).getPropertyValue('background-color');
+    entryGame.style.backgroundColor = cc;
   }
 
   return {

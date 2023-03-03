@@ -16,8 +16,8 @@ export default function controller() {
 
     async function saveScore() {
         const scores = vm.getEntry();
-        await db.saveScore(scores);
         vm.setScores(scores);
+        await db.saveScore(scores);
         await gotoPage();
     };
 

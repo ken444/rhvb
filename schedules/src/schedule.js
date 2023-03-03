@@ -8,7 +8,7 @@ export default function schedule(title, heading, game) {
         case 'g':
           return game(`${gameIndex++}`, [entry[1], entry[2]])
         case 't':
-          return heading(entry[1]);
+          return heading("");
         case 'h':
           return title(entry[1]);
         case 's':

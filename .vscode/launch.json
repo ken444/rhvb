@@ -1,27 +1,26 @@
 {
     "configurations": [
-
         {
-            "type": "pwa-msedge",
+            "type": "msedge",
             "name": "Launch Microsoft Edge",
             "request": "launch",
             "runtimeArgs": [
                 "--remote-debugging-port=9222"
             ],
-            "url": "http://127.0.0.1:5500/schedules/test1.html",
+            "url": "http://127.0.0.1:3000/schedules/test1.html", // Provide your project's url to finish configuring
             "presentation": {
                 "hidden": true
             }
         },
         {
-            "type": "pwa-msedge",
+            "type": "msedge",
             "name": "Launch Microsoft Edge in headless mode",
             "request": "launch",
             "runtimeArgs": [
                 "--headless",
                 "--remote-debugging-port=9222"
             ],
-            "url": "http://127.0.0.1:5500/schedules/test1.html",
+            "url": "http://127.0.0.1:3000/schedules/test1.html",
             "presentation": {
                 "hidden": true
             }
@@ -30,7 +29,7 @@
             "type": "vscode-edge-devtools.debug",
             "name": "Open Edge DevTools",
             "request": "attach",
-            "url": "http://127.0.0.1:5500/schedules/test1.html",
+            "url": "http://127.0.0.1:3000/schedules/test1.html",
             "presentation": {
                 "hidden": true
             }
