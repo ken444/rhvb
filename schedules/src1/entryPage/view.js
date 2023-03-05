@@ -1,12 +1,11 @@
 import { html, render, svg } from '/node_modules/lit-html/lit-html.js';
-import schedule from "./schedule.js";
 
 export default function view() {
 
     const scoreLine = html`
         <div class="m-2 rounded-xl grid font-medium text-3xl leading-none">
             <div data-entryTeam class="p-2 truncate"></div>
-            <input type="number" title="entryScore" data-entryScore autofocus class="form-input rounded-xl m-4 w-1/2 justify-self-end text-right font-medium text-3xl leading-none
+            <input type="number" title="entryScore" data-entryScore autofocus class="form-input rounded-xl m-4 w-1/2 justify-self-end text-right ${teamNameStyle}
                                         focus:(ring-8 ring-offset-4 ring-red-500)">
         </div>
     `;
@@ -52,42 +51,11 @@ export default function view() {
         ${s.map(x => pastScoresItem(x.scores))}
     `;
 
-    const team = (t, s) => html`
-        <div class="px-3 font-medium text-3xl leading-none flex">
-            <div data-team class="pb-2 flex-1 truncate">${t}</div>
-            <div data-score>${s}</div>
-        </div>
-    `;
-
-    const game = (id, teams) => html`
-        <div data-game = ${teams[3]} class="rounded-xl ${teams[3]} m-1" @click=${async () => await controller?.gotoPage(id)} >
-            <div data-gamename class="text-lg italic font-bold tracking-widest text-white text-center leading-none">${teams[2]}</div>
-            <div class="grid grid-flow-col auto-cols-fr">
-                ${teams.slice(0, 2).map(x => team(x))}
-            </div>
-        </div>
-    `;
-
-    const heading = (s) => html`<div data-heading class="text-xs text-end font-bold text-blue-300 h-3"></div>`;
-
-    const title = (s) => html`<div class="text-xl px-4 italic">${s}</div>`;
-
-    const { htmlArray, date } = schedule(title, heading, game);
-
-    const dom = html`
-        <div class="mx-auto max-w-screen-sm">
-            <div id="mainPage" style="display: none"> ${htmlArray} </div>
-            <div id="entryPage" style="display: none"> ${scorePage} </div>
-        </div>
-    `;
-
-    render(dom, document.body);
-
     function setPastScores(s, e) { render(pastScores(s), e) };
 
     return {
         setPastScores,
-        date
+        scorePage
     }
 
 }
