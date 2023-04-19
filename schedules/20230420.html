@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RHVB</title>
+    <script async src="/node_modules/es-module-shims/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "@twind/core": "/node_modules/@twind/core/core.js",
+                "style-vendorizer": "/node_modules/style-vendorizer/dist/esm/bundle.min.mjs",
+                "@twind/preset-tailwind/colors": "/node_modules/@twind/preset-tailwind/colors.js",
+                "@twind/preset-tailwind/defaultTheme": "/node_modules/@twind/preset-tailwind/defaultTheme.js"
+            }
+        }
+    </script>
+    <script type="module">
+        window.schedule =
+`
+
+h	April 20 2023			
+d	20230420			
+t	8:15 PM			
+g	Philip	Greg	Silver Pines  - 8:15 PM	bg-gray-400
+t	0.857638889			
+g	Karen	Philip	Silver Pines  - 8:35 PM	bg-gray-400
+t	0.871527778			
+g	Greg	Karen	Silver Pines  - 8:55 PM	bg-gray-400
+t	0.885416667			
+g	Philip	Greg	Silver Pines  - 9:15 PM	bg-gray-400
+t	0.899305556			
+g	Karen	Philip	Silver Pines  - 9:35 PM	bg-gray-400
+t	9:55 PM			
+g	Greg	Karen	Silver Pines  - 9:55 PM	bg-gray-400
+
+
+`
+    </script>
+    <script type="module" src="src1/twind.js"></script>
+    <script type="module" src="src1/app.js"></script>
+</head>
+
+</html>
