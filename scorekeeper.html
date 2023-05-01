@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Score Keeper</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .team {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .team-red {
+      background-color: red;
+    }
+
+    .team-blue {
+      background-color: blue;
+    }
+
+    .score {
+      font-size: calc(10vw + 10vh);
+      color: white;
+      margin: 0;
+    }
+  </style>
+  <script>
+    function incrementScore(team) {
+      const scoreElement = document.getElementById(`score-${team}`);
+      const currentScore = parseInt(scoreElement.textContent, 10);
+      scoreElement.textContent = currentScore + 1;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="team team-red" onclick="incrementScore('red')">
+      <div class="score" id="score-red">0</div>
+    </div>
+    <div class="team team-blue" onclick="incrementScore('blue')">
+      <div class="score" id="score-blue">0</div>
+    </div>
+  </div>
+</body>
+</html>
