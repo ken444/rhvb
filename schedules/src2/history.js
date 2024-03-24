@@ -1,4 +1,5 @@
 import { LitElement, html }  from '/node_modules/lit/index.js';
+import "./twind.js"
 
 //import '/node_modules/lit-html/lit-html.js';
 
@@ -7,9 +8,18 @@ import { LitElement, html }  from '/node_modules/lit/index.js';
 
 //import '/node_modules/lit/index.js';
 
+import install1 from '/node_modules/@twind/with-web-components/with-web-components.js'
+
+import presetAutoprefix from '/node_modules/@twind/preset-autoprefix/preset-autoprefix.js'
+import presetTailwind from '/node_modules/@twind/preset-tailwind/preset-tailwind.js'
+import presetTailwindForms from '/node_modules/@twind/preset-tailwind-forms/preset-tailwind-forms.js'
 
 
-class MyElement extends LitElement {
+const withTwind = install1({presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms()],})
+
+
+
+class MyElement extends withTwind(LitElement) {
 
   // Implement `render` to define a template for your element.
   render(){
@@ -21,7 +31,7 @@ class MyElement extends LitElement {
      */
     return html`
       <div>
-        <p class="text-3xl font-bold underline">A parag3raph</p>
+        <p class="text-3xl font-bold underline">A parag32raph</p>
       </div>
     `;
   }

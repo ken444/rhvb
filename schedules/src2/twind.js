@@ -1,4 +1,6 @@
-import { install } from '/node_modules/@twind/core/core.js'
+import { install, defineConfig } from '/node_modules/@twind/core/core.js'
+import install1 from '/node_modules/@twind/with-web-components/with-web-components.js'
+//import config from '/node_modules/@twind/core/core.js'
 //You must call install at least once, but can call it multiple times
 // install({
 //   presets: [
@@ -18,4 +20,4 @@ install({
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms()],
 })
 
-
+var withTwind1 = install1({presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms()],})
