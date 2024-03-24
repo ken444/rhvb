@@ -21,7 +21,7 @@ class MyElement extends LitElement {
      */
     return html`
       <div>
-        <p>A paragraph</p>
+        <p class="text-3xl font-bold underline">A parag3raph</p>
       </div>
     `;
   }
