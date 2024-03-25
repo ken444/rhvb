@@ -78,6 +78,7 @@ export default function view() {
 
     const dom = html`
         <div class="mx-auto max-w-screen-sm">
+        <h1 class="text-3xl font-bold underline">Hello world!</h1>
             <div id="mainPage" style="display: none"> ${htmlArray} </div>
             <div id="entryPage" style="display: none"> ${scorePage} </div>
         </div>

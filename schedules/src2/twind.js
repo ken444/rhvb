@@ -1,4 +1,4 @@
-import { install } from '/node_modules/@twind/core/core.js'
+//import * as x from 'https://cdn.jsdelivr.net/npm/@twind/core@1.1.3/core.global.min.js'
 //You must call install at least once, but can call it multiple times
 // install({
 //   presets: [
@@ -13,7 +13,7 @@ import presetTailwind from '/node_modules/@twind/preset-tailwind/preset-tailwind
 import presetTailwindForms from '/node_modules/@twind/preset-tailwind-forms/preset-tailwind-forms.js'
 
 
-install({
+x.twind.install({
   /* config */
   presets: [presetAutoprefix(), presetTailwind(), presetTailwindForms()],
 })

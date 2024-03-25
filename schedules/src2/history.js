@@ -1,4 +1,4 @@
-import { LitElement, html }  from '/node_modules/lit/index.js';
+import {LitElement, html} from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
 
 //import '/node_modules/lit-html/lit-html.js';
 
