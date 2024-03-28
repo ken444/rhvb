@@ -1,6 +1,8 @@
 import { html, render, svg } from '/node_modules/lit-html/lit-html.js';
 import schedule from "./schedule.js";
 import "./history.js"
+import "./pastScoreLine.js"
+import "./pastScoreItem.js"
 
 export default function view() {
 
@@ -10,10 +12,6 @@ export default function view() {
             <input type="number" title="entryScore" data-entryScore autofocus class="form-input rounded-xl m-4 w-1/2 justify-self-end text-right font-medium text-3xl leading-none
                                         focus:(ring-8 ring-offset-4 ring-red-500)">
         </div>
-    `;
-
-    const pastScoreLine = (score) => html`
-        <div class="m-2 py-2 px-8 rounded-xl bg-blue-400 text-3xl text-right">${score}</div>
     `;
 
     const closeX = html`
@@ -40,11 +38,8 @@ export default function view() {
         <div id="history"></div>
     `;
 
-    const pastScoresItem = (scores) => html`
-        <div class="grid grid-flow-col auto-cols-fr">
-            ${scores.map(v => pastScoreLine(v))}
-        </div>
-    `;
+
+    const pastScoresItem = (scores) => html`<my-pastscoreitem scores=${scores}></my-pastscoreitem>`;
 
     const pastScores = (s) => (!s || s.length == 0) ? null : html`
         <div class="text-lg p-2 italic text-center leading-tight">
@@ -66,7 +61,6 @@ export default function view() {
             <div class="grid grid-flow-col auto-cols-fr">
                 ${teams.slice(0, 2).map(x => team(x))}
             </div>
-            <my-history>123</my-history>
         </div>
     `;
 
@@ -78,7 +72,6 @@ export default function view() {
 
     const dom = html`
         <div class="mx-auto max-w-screen-sm">
-        <h1 class="text-3xl font-bold underline">Hello world!</h1>
             <div id="mainPage" style="display: none"> ${htmlArray} </div>
             <div id="entryPage" style="display: none"> ${scorePage} </div>
         </div>

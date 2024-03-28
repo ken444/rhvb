@@ -18,3 +18,22 @@ export default function schedule(title, heading, game) {
 
     return { htmlArray, date }
 }
+
+export function buildSchedule() {
+
+  let date = '';
+  const x = window.schedule.split('\n').map((e) => {
+    let entry = e.split('\t');
+    switch (entry[0]) {
+      case 'g':
+        return [entry[0], { teams: entry.slice(1,2), game: entry[3], color: entry[4] }]
+      case 'd':
+        date = entry[1];
+        return
+     default:
+        return [entry[0], entry[1]]
+    }
+  });  
+  
+  return { x, date }
+}
