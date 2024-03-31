@@ -1,37 +1,45 @@
 import createdb from "./db.js";
 import createvm from "./vm.js";
+import buildschedule from "./schedule.js";
 
 export default function controller() {
 
     const db = createdb();
-    const vm = createvm();
+    const { schedule, date } = buildschedule();
+    const vm = createvm(schedule);
+
+    const findIndex = (id) => schedule.findIndex((e) => e[0] == id);
 
     async function updatePastScores(force = false) {
-        const id = vm.getPage();
-        if (id) {
-            const scores = await db.getPastScores(view.date, id, force);
-            if (scores) vm.setPastScores(scores);
+        const index = vm.getPage();
+        if (index) {
+            const id = schedule[index][0];
+            const scores = await db.getPastScores(date, id, force);
+            if (scores) vm.setEntryPastScores(scores);
         }
     };
 
     async function saveScore() {
-        const scores = vm.getEntry();
-        vm.setScores(scores);
-        await db.saveScore(scores);
+        const scores = vm.getEntryScores();
+        const index = vm.getPage();
+        const game = schedule[index][0];
+        vm.setScores(index, scores);
+        await db.saveScore(date, game, scores);
         await gotoPage();
     };
 
     async function updateScores() {
-        const scores = await db.getScores(view.date);
-        await scores?.map(v => vm.setScores(v));
+        const scores = await db.getScores(date);
+        await scores?.map(v => {
+            const index = findIndex(v.game);
+            vm.setScores(index, v.scores)
+        });
     };
 
     async function setPage(game) {
         if (game) {
             try {
-                //vm.entryGame window.getComputedStyle( document.body ,null).getPropertyValue('background-color')
-                
-                vm.setEntryTeams(game);
+                vm.resetEntry(schedule[game][2]);
                 vm.setPage(game);
                 await updatePastScores(true);
             } catch {
@@ -59,8 +67,8 @@ export default function controller() {
         await updateScores();
 
         setInterval(async () => {
-            await updateScores();
-            await updatePastScores();
+            //await updateScores();
+            //await updatePastScores();
         }, 60000);
     }
 

@@ -1,8 +1,8 @@
 import createview from "./view.js";
 
-export default function vm() {
+export default function vm(schedule) {
   
-  window.view = createview();
+  const view = createview(schedule);
 
   const mainPage = document.querySelector("#mainPage");
   const entryPage = document.querySelector("#entryPage");
@@ -11,18 +11,15 @@ export default function vm() {
   const entryTeams = Array.from(entryPage.querySelectorAll('[data-entryTeam]'));
   const entryScores = Array.from(entryPage.querySelectorAll('[data-entryScore]'));
   const entryHistory = document.querySelector("#history");
-  const gameScores = Array.from(mainPage.querySelectorAll('[data-game]')).map(s => ({
-    scores: Array.from(s.querySelectorAll('[data-score]')),
-    teams: Array.from(s.querySelectorAll('[data-team]')),
-    game: s.querySelector('[data-gamename]'),
-    color: s
-  }));
+  const gameScores = Array.from(mainPage.querySelectorAll('[data-schedule]')).map(s => (
+    Array.from(s.querySelectorAll('[data-score]'))
+  ));
 
-  let id = null;
+  let index = null;
 
   function setPage(game) {
-    id = game;
-    if (id) {
+    index = game;
+    if (index) {
       try {
         mainPage.style.display = 'none';
         entryPage.style.display = 'block';
@@ -35,25 +32,31 @@ export default function vm() {
     }
   };
 
-  const getTeams = (g) => gameScores[g].teams.map((x) => x.innerHTML);
+  function resetEntry(game) {
 
-  const setEntryTeams = (g) => {
     view.setPastScores(null, entryHistory);
-    entryTeams.map((x, i) => x.innerHTML = getTeams(g)[i]);
+
+    entryTeams.map((x, i) => x.innerHTML = game.teams[i]);
+
     entryScores.map(x => x.value = '');
-    const x = gameScores[g];
-    entryHeading.innerHTML = x.game.innerHTML;
-    const cc = window.getComputedStyle(x.color).getPropertyValue('background-color');
-    entryGame.style.backgroundColor = cc;
+
+    entryHeading.innerHTML = game.game;
+
+    entryGame.classList.remove(...entryGame.classList);
+
+    entryGame.classList.add(game.color);
+
   }
 
   return {
-    setScores: (s) => gameScores[s.game]?.scores?.map((v, i) => v.innerHTML = s.scores?.[i]),
-    setPastScores: (s = null) => view.setPastScores(s, entryHistory),
-    getPage: () => id,
+    setScores: (index, score) => gameScores[index]?.map(
+      (v, i) => v.innerHTML = score?.[i]
+      ),
+    setEntryPastScores: (s = null) => view.setPastScores(s, entryHistory),
+    getPage: () => index,
     setPage,
-    getEntry: () => ({date: view.date, game: id, scores: entryScores.map(v => v.value) }),
-    setEntryTeams,
+    getEntryScores: () => (entryScores.map(v => v.value) ),
+    resetEntry,
   }
 
 }

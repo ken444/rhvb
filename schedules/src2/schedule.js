@@ -1,39 +1,18 @@
-export default function schedule(title, heading, game) {
-
-    let date = '';
-    let gameIndex = 0;
-    const htmlArray = window.schedule.split('\n').map((e) => {
-      let entry = e.split('\t');
-      switch (entry[0]) {
-        case 'g':
-          return game(`${gameIndex++}`, entry.slice(1))
-        case 't':
-          return heading(entry[1]);
-        case 'h':
-          return title(entry[1]);
-        case 'd':
-          date = entry[1];
-      }
-    });
-
-    return { htmlArray, date }
-}
-
-export function buildSchedule() {
+export default function buildSchedule() {
 
   let date = '';
-  const x = window.schedule.split('\n').map((e) => {
+  const schedule = window.schedule.split('\n').map((e) => {
     let entry = e.split('\t');
     switch (entry[0]) {
       case 'g':
-        return [entry[0], { teams: entry.slice(1,2), game: entry[3], color: entry[4] }]
+        return [entry[5], 'g', { teams: entry.slice(1,3), game: entry[3], color: entry[4], id: entry[5] }]
       case 'd':
         date = entry[1];
-        return
+        return [null, null]
      default:
-        return [entry[0], entry[1]]
+        return [null, entry[0], entry[1]]
     }
   });  
   
-  return { x, date }
+  return { schedule, date }
 }
