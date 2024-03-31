@@ -49,7 +49,7 @@ export default function vm(schedule) {
   }
 
   return {
-    setScores: (index, score) => gameScores[index]?.map(
+    setScores: (index, score) => gameScores[schedule[index][2].gameIndex]?.map(
       (v, i) => v.innerHTML = score?.[i]
       ),
     setEntryPastScores: (s = null) => view.setPastScores(s, entryHistory),

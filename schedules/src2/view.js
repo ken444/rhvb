@@ -73,9 +73,9 @@ export default function view(schedule) {
         </div>
     `;
 
-    const heading = (s) => html`<div data-schedule class="text-xs text-end font-bold text-blue-300 h-3"></div>`;
+    const heading = (s) => html`<div class="text-xs text-end font-bold text-blue-300 h-3"></div>`;
 
-    const title = (s) => html`<div data-schedule class="text-xl px-4 italic">${s}</div>`;
+    const title = (s) => html`<div class="text-xl px-4 italic">${s}</div>`;
 
     const htmlArray = schedule.map((e, i) => {
         switch (e[1]) {

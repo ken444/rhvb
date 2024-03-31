@@ -22,8 +22,8 @@ export default function controller() {
     async function saveScore() {
         const scores = vm.getEntryScores();
         const index = vm.getPage();
-        const game = schedule[index][0];
         vm.setScores(index, scores);
+        const game = schedule[index][0];
         await db.saveScore(date, game, scores);
         await gotoPage();
     };
