@@ -1,4 +1,6 @@
 import { html, render, svg } from '/node_modules/lit-html/lit-html.js';
+import "./pastScoreLine.js"
+import "./pastScoreItem.js"
 
 export default function view(schedule) {
 
@@ -86,6 +88,31 @@ export default function view(schedule) {
         }
     });
 
+    function mainView() {
+
+        let index = null;
+
+        if (index) {
+          try {
+            entryScores[0].focus();
+          } catch {
+          }
+        }
+
+        const dom = html`
+            <div class="mx-auto max-w-screen-sm">
+                <div id="mainPage" style=${index ? "display: none" : "display: block"}> ${htmlArray} </div>
+                <div id="entryPage" style=${index ? "display: block" : "display: none"}> ${scorePage} </div>
+            </div>
+        `;
+
+        return {
+            dom,
+            setIndex: (index1) => index = index1,
+        }
+
+    }
+
     const dom = html`
         <div class="mx-auto max-w-screen-sm">
             <div id="mainPage" style="display: none"> ${htmlArray} </div>
@@ -99,6 +126,7 @@ export default function view(schedule) {
 
     return {
         setPastScores,
+        dom
     }
 
 }
