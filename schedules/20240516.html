@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RHVB</title>
+    <script async src="/node_modules/es-module-shims/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "@twind/core": "/node_modules/@twind/core/core.js",
+                "style-vendorizer": "/node_modules/style-vendorizer/dist/esm/bundle.min.mjs",
+                "@twind/preset-tailwind/colors": "/node_modules/@twind/preset-tailwind/colors.js",
+                "@twind/preset-tailwind/defaultTheme": "/node_modules/@twind/preset-tailwind/defaultTheme.js"
+            }
+        }
+    </script>
+    <script type="module">
+        window.schedule =
+`
+h	May 16 2024				0
+d	20240516				1
+t					2
+g	Lev	Jolie	OLQW North - 8:15 PM - T1	bg-blue-400	9
+g	Showtime	Derek	OLQW Center - 8:15 PM - T2	bg-blue-400	10
+g	Andrew	Greg	OLQW South - 8:15 PM - T3	bg-blue-400	11
+g	Scott	Dmitry	RHHS East - 8:15 PM - T4	bg-green-500	42
+g	Wayne	Natalie	RHHS West - 8:15 PM - T5	bg-green-500	43
+t					3
+g	Jolie	Anthony	OLQW North - 8:35 PM - T1	bg-blue-400	12
+g	Derek	Karen	OLQW Center - 8:35 PM - T2	bg-blue-400	13
+g	Greg	Philip	OLQW South - 8:35 PM - T3	bg-blue-400	14
+g	Dmitry	Charis	RHHS East - 8:35 PM - T4	bg-green-500	44
+g	Natalie	Afshin	RHHS West - 8:35 PM - T5	bg-green-500	45
+t					4
+g	Anthony	Lev	OLQW North - 8:55 PM - T1	bg-blue-400	15
+g	Karen	Showtime	OLQW Center - 8:55 PM - T2	bg-blue-400	16
+g	Philip	Andrew	OLQW South - 8:55 PM - T3	bg-blue-400	17
+g	Charis	Scott	RHHS East - 8:55 PM - T4	bg-green-500	46
+g	Afshin	Wayne	RHHS West - 8:55 PM - T5	bg-green-500	47
+t					5
+g	Lev	Jolie	OLQW North - 9:15 PM - T1	bg-blue-400	18
+g	Showtime	Derek	OLQW Center - 9:15 PM - T2	bg-blue-400	19
+g	Andrew	Greg	OLQW South - 9:15 PM - T3	bg-blue-400	20
+g	Scott	Dmitry	RHHS East - 9:15 PM - T4	bg-green-500	48
+g	Wayne	Natalie	RHHS West - 9:15 PM - T5	bg-green-500	49
+t					6
+g	Jolie	Anthony	OLQW North - 9:35 PM - T1	bg-blue-400	21
+g	Derek	Karen	OLQW Center - 9:35 PM - T2	bg-blue-400	22
+g	Greg	Philip	OLQW South - 9:35 PM - T3	bg-blue-400	23
+g	Dmitry	Charis	RHHS East - 9:35 PM - T4	bg-green-500	50
+g	Natalie	Afshin	RHHS West - 9:35 PM - T5	bg-green-500	51
+t					7
+g	Anthony	Lev	OLQW North - 9:55 PM - T1	bg-blue-400	24
+g	Karen	Showtime	OLQW Center - 9:55 PM - T2	bg-blue-400	25
+g	Philip	Andrew	OLQW South - 9:55 PM - T3	bg-blue-400	26
+g	Charis	Scott	RHHS East - 9:55 PM - T4	bg-green-500	52
+g	Afshin	Wayne	RHHS West - 9:55 PM - T5	bg-green-500	53
+
+`
+    </script>
+    <script type="module" src="src1/twind.js"></script>
+    <script type="module" src="src1/app.js"></script>
+</head>
+
+</html>
