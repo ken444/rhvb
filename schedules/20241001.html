@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RHVB</title>
+    <script async src="/node_modules/es-module-shims/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "@twind/core": "/node_modules/@twind/core/core.js",
+                "style-vendorizer": "/node_modules/style-vendorizer/dist/esm/bundle.min.mjs",
+                "@twind/preset-tailwind/colors": "/node_modules/@twind/preset-tailwind/colors.js",
+                "@twind/preset-tailwind/defaultTheme": "/node_modules/@twind/preset-tailwind/defaultTheme.js"
+            }
+        }
+    </script>
+    <script type="module">
+        window.schedule =
+`
+h	Oct 01 2024			
+d	2024101			
+t				
+g	Dave	Michael	RHHS East - 8:15 PM - T	bg-green-500
+g	Afshin	Natalie	RHHS West - 8:15 PM - T	bg-green-500
+t				
+g	Afshin	Vince	RHHS East - 8:35 PM - T	bg-green-500
+g	Natalie	Michael	RHHS West - 8:35 PM - T	bg-green-500
+t				
+g	Natalie	Dave	RHHS East - 8:55 PM - T	bg-green-500
+g	Michael	Vince	RHHS West - 8:55 PM - T	bg-green-500
+t				
+g	Michael	Afshin	RHHS East - 9:15 PM - T	bg-green-500
+g	Vince	Dave	RHHS West - 9:15 PM - T	bg-green-500
+t				
+g	Vince	Natalie	RHHS East - 9:35 PM - T	bg-green-500
+g	Dave	Afshin	RHHS West - 9:35 PM - T	bg-green-500
+t				
+g	Dave	Michael	RHHS East - 9:55 PM - T	bg-green-500
+g	Afshin	Natalie	RHHS West - 9:55 PM - T	bg-green-500
+
+`
+    </script>
+    <script type="module" src="src1/twind.js"></script>
+    <script type="module" src="src1/app.js"></script>
+</head>
+
+</html>
