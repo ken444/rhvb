@@ -13,7 +13,7 @@ export default function db() {
     return {
 
         async saveScore(x) {
-            await fetch(uri/V2, {
+            await fetch(uri, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json;charset=utf-8' },
                 body: JSON.stringify(x)
