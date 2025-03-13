@@ -13,7 +13,7 @@ export default function db() {
     return {
 
         async saveScore(x) {
-            await fetch(uri, {
+            await fetch(uri/V2, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json;charset=utf-8' },
                 body: JSON.stringify(x)
@@ -21,14 +21,14 @@ export default function db() {
         },
 
         async getScores(date) {
-            const scores1 = await fetch(`${uri}/date/'${date}'/${stage1}`);
+            const scores1 = await fetch(`${uri}/V2/date/'${date}'/${stage1}`);
             const scores = await scores1.json();
             stage1 = scores.stage;
             return scores.data;
         },
 
         async getPastScores(date, id, force) {
-            const scores = await (await fetch(`${uri}/date/'${date}'/game/'${id}'/${force ? -1 : stage2}`)).json();
+            const scores = await (await fetch(`${uri}/V2/date/'${date}'/game/'${id}'/${force ? -1 : stage2}`)).json();
             stage2 = scores.stage;
             return scores.data;
         }
