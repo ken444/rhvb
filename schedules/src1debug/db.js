@@ -46,7 +46,7 @@ export default function db() {
         },
 
         async getScores(date) {
-            const scores1 = await fetch(`${uri}/V3?date1=${date}&stage=${stage1}`);
+            const scores1 = await fetch(`${uri}/V3?date=${date}&stage=${stage1}`);
             const scores = await scores1.json();
             stage1 = scores.stage;
             return scores.data;
