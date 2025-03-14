@@ -1,22 +1,20 @@
 import { CosmosClient } from '@azure/cosmos';
 import { AppConfigurationClient } from "@azure/app-configuration";
 import { app } from '@azure/functions';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const apiKey = process.env.API_KEY;
+console.log(apiKey);
 
 const databaseId = 'volleyball';
 const containerId = 'Scores';
 const partitionKey = { kind: 'Hash', paths: ['/date'] }
 
-const options = {
-  endpoint: 'https://rhvb564.documents.azure.com:443/',
-  key: 'D3DQ8Tu2BVMo95NAKdeVExETsK1j64K7zHipA3TG3h440xKxMjAkGMy2KWtX5ReTK4S5QEl90nCVACDb4ryX3w==',
-  userAgentSuffix: 'RHVb'
-};
+const configConnectionString = process.env.APPCONFIG_CONNECTION_STRING;
 
-const client = new CosmosClient(options)
-
-const configConnectionString = "Endpoint=https://stage.azconfig.io;Id=gQvD;Secret=2ih0mQvSiekWmNlPixrQdCzelzulbm75sx2JX9OCN4hW1OkD7zvHJQQJ99BCAC1i4Tk60P2CAAACAZACsjlX";
-const configClient = new AppConfigurationClient(configConnectionString);
-
+const dbConnection = process.env.COSMOSDB_CONNECTION_STRING;
 /**
  * Create the database if it does not exist
  */
@@ -38,9 +36,9 @@ async function createContainer() {
  */
 
 async function queryContainerV2(date, game) {
-  
+
   try {
-    const client = new CosmosClient(options);
+    const client = new CosmosClient(dbConnection);
     const items = client.database(databaseId).container(containerId).items;
     //if (game) return await items.query(`SELECT c.scores FROM c WHERE (c.date='${date}') and (c.game='${game}') ORDER BY c._ts DESC`).fetchAll();
     const latest = await items.query(`SELECT VALUE MAX(c._ts) FROM c WHERE c.date='${date}' GROUP BY c.game`).fetchAll();
@@ -52,7 +50,7 @@ async function queryContainerV2(date, game) {
 }
 
 async function queryContainer1V2(date, game) {
-  const client = new CosmosClient(options);
+  const client = new CosmosClient(dbConnection);
   const items = client.database(databaseId).container(containerId).items;
   if (game) return await items.query(`SELECT c.scores FROM c WHERE (c.date='${date}') and (c.game='${game}') ORDER BY c._ts DESC`).fetchAll();
 
@@ -69,6 +67,8 @@ async function queryContainerV3(date, game) {
 
 async function getConfigurationSetting() {
   try {
+    console.log("Retrieving configuration setting...");
+    const configClient = new AppConfigurationClient(configConnectionString);
     const setting = await configClient.getConfigurationSetting({ key: "stage" });
     console.log(`Key: ${setting.key}, Value: ${setting.value}`);
     return setting.value;
@@ -128,8 +128,10 @@ app.http('myFunction987', {
   route: 'V2/date/{date}/{stage}',
   authLevel: 'anonymous',
   handler: async (request, context) => {
+    console.log(request.params);
     try {
       const setting = await getConfigurationSetting();
+      console.log(setting); 
       if (request.params.stage == setting) {
         return {
           body: JSON.stringify({
@@ -138,6 +140,7 @@ app.http('myFunction987', {
         };
       } else {
         const { resources } = await queryContainerV2(request.params.date, null);
+        console.log(resources);
         return {
           body: JSON.stringify({
             data: resources,
