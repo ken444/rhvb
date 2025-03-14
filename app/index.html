@@ -2,7 +2,27 @@
 <html>
 
 <body>
-    <h1>Hello World from RHVB</h1>
+    <h1>Hello World from RHVB 1</h1>
+    <main>
+        <h1>Vanilla JavaScript App</h1>
+        <p>Loading content from my API: <b id="name">...</b></p>
+    </main>
+
+    <script>
+        (async function () {
+            const a = await fetch(`/api/httpTrigger2?tt=2343&name=123Ken C&date=1234`);
+            const { text } = await a.json();
+            document.querySelector('#name').textContent = text;
+
+            console.log('fetching data from another function');
+
+            const b = await fetch(`/api/httpTrigger3?tt=2343&name=123Ken C&date=1234`);
+
+            document.querySelector('#name').textContent = await b.text();
+
+            console.log(b);
+        }());
+    </script>
 </body>
 
 </html>

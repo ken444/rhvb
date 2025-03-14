@@ -5,6 +5,15 @@
             "name": "http://127.0.0.1:3000/schedules/test.html",
             "request": "launch",
             "url": "http://127.0.0.1:3000/schedules/test.html"
+        },
+        {
+            "name": "Attach to Node Functions",
+            "type": "node",
+            "request": "attach",
+            "restart": true,
+            "port": 9229,
+            "preLaunchTask": "func: host start"
         }
-    ]
+    ],
+    "version": "0.2.0"
 }
