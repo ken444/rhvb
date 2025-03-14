@@ -38,6 +38,7 @@ async function createContainer() {
  */
 
 async function queryContainerV2(date, game) {
+  
   try {
     const client = new CosmosClient(options);
     const items = client.database(databaseId).container(containerId).items;
