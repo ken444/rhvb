@@ -1,15 +1,11 @@
-import { CosmosClient } from '@azure/cosmos';
-import { AppConfigurationClient } from "@azure/app-configuration";
+import { CosmosClient, ChangeFeedStartFrom } from '@azure/cosmos';
 import { app } from '@azure/functions';
 import dotenv from 'dotenv';
-
-import { getContainerMetadataWithConnectionString } from './getTimeStamp.js';
 
 dotenv.config();
 
 const databaseId = 'volleyball';
 const containerId = 'Scores';
-
 
 
 /**
@@ -34,65 +30,34 @@ async function createContainer() {
 /**
  * Query the container using SQL
  */
-
 async function queryContainer(date, game) {
   try {
     const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
     const items = client.database(databaseId).container(containerId).items;
     if (game) return await items.query(`SELECT c.scores FROM c WHERE (c.date='${date}') and (c.game='${game}') ORDER BY c._ts DESC`).fetchAll();
-
-    const latest = await items.query(`SELECT VALUE MAX(c._ts) FROM c WHERE c.date='${date}' GROUP BY c.game`).fetchAll();
-    return await items.query(`SELECT c.game, c.scores FROM c WHERE ARRAY_CONTAINS(${JSON.stringify(latest.resources)}, c._ts, false)`).fetchAll();
+    const { resources } = await items.query(`SELECT VALUE MAX(c._ts) FROM c WHERE c.date='${date}' GROUP BY c.game`).fetchAll();
+    return await items.query(`SELECT c.game, c.scores FROM c WHERE ARRAY_CONTAINS(${JSON.stringify(resources)}, c._ts, false)`).fetchAll();
   } catch (error) {
     console.error('Error querying container:', error);
     throw error;
   }
 }
 
-async function getConfigurationSetting() {
+async function hasContainerChanged(previousContinuationToken) {
   try {
-    console.log("Retrieving configuration setting...");
-    const configClient = new AppConfigurationClient(process.env.APPCONFIG_CONNECTION_STRING);
-    const setting = await configClient.getConfigurationSetting({ key: "stage" });
-    return setting.value;
-  } catch (err) {
-    console.error("Error retrieving configuration setting:", err);
-    throw err;
-  }
-}
+    const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
 
-async function updateConfigurationSetting(setting) {
-  try {
-    const configClient = new AppConfigurationClient(process.env.APPCONFIG_CONNECTION_STRING);
-    const updatedSetting = await configClient.setConfigurationSetting({
-      key: "stage",
-      value: setting.toString()
-    });
-    console.log(`Updated Key: ${updatedSetting.key}, New Value: ${updatedSetting.value}`);
-  } catch (err) {
-    console.error("Error updating configuration setting:", err);
-    throw err;
-  }
-}
-
-
-async function hasContainerChanged(previousContinuationToken = null) {
-  const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
-
-  try {
-    const response = await client.database(databaseId).container(containerId).items.changeFeed({
-      continuationToken: previousContinuationToken,
+    const { count, continuationToken } = await client.database(databaseId).container(containerId).items.getChangeFeedIterator({
       maxItemCount: 1, // We only need to know if there's at least one change
-    }).fetchAll();
+      changeFeedStartFrom: !previousContinuationToken ? ChangeFeedStartFrom.Now() : ChangeFeedStartFrom.Continuation(previousContinuationToken),
+    }).readNext();
 
-    const hasChanged = response.resources && response.resources.length > 0;
-    const latestContinuationToken = response.continuationToken;
-
-    return { hasChanged, latestContinuationToken };
+    const hasChanged = !previousContinuationToken || count > 0;
+    return { hasChanged, continuationToken };
 
   } catch (error) {
     console.error("Error checking for changes:", error);
-    return { hasChanged: false, latestContinuationToken: previousContinuationToken }; // Return previous token on error
+    return { hasChanged: false, continuationToken: '' };
   }
 }
 
@@ -102,26 +67,15 @@ app.http('V3', {
   handler: async (request, context) => {
     console.log(request.params);
     try {
-      const { stage, date, game } = request.params; 
-      const { hasChanged, setting } = await hasContainerChanged(stage);
-
-      console.log(stage, date, game, setting);
-      if (!hasChanged) {
-        return {
-          body: JSON.stringify({
-            stage: setting
-          })
-        };
-      } else {
+      const { stage, date, game } = request.params;
+      const { hasChanged, continuationToken } = await hasContainerChanged(stage);
+      const r = { stage: continuationToken };
+      if (hasChanged) {
         const { resources } = await queryContainer(date, game);
         console.log(resources);
-        return {
-          body: JSON.stringify({
-            data: resources,
-            stage: setting
-          })
-        }
+        r.data = resources;
       }
+      return { body: JSON.stringify(r) };
     } catch (error) {
       console.error('Error handling request:', error);
       return {
@@ -137,18 +91,11 @@ app.http('V3p', {
   authLevel: 'anonymous',
   handler: async (request, context) => {
     try {
-      //const data = JSON.parse(await request.text());
       const data = await request.json();
       console.log(data);
       const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
       const { resource } = await client.database(databaseId).container(containerId).items.create(data);
       console.log(resource);
-      //await updateConfigurationSetting(resource._ts);
-      return {
-        body: JSON.stringify({
-          data: resource
-        })
-      }
     } catch (error) {
       console.error('Error creating item:', error);
       request.status(500).send(error);
