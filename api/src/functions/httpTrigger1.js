@@ -96,6 +96,7 @@ app.http('V3p', {
       const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
       const { resource } = await client.database(databaseId).container(containerId).items.create(data);
       console.log(resource);
+      return { body: JSON.stringify(resource) };
     } catch (error) {
       console.error('Error creating item:', error);
       request.status(500).send(error);
