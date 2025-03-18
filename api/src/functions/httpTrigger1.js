@@ -27,16 +27,15 @@ async function createContainer() {
   console.log(`Created container:\n${_container.id}\n`)
 }
 
-/**
- * Query the container using SQL
- */
+function container() {
+  const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
+  return client.database(databaseId).container(containerId);
+}
+
 async function queryContainer(date, game) {
   try {
-    const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
-    const items = client.database(databaseId).container(containerId).items;
-    if (game) return await items.query(`SELECT c.scores FROM c WHERE (c.date='${date}') and (c.game='${game}') ORDER BY c._ts DESC`).fetchAll();
-    const { resources } = await items.query(`SELECT VALUE MAX(c._ts) FROM c WHERE c.date='${date}' GROUP BY c.game`).fetchAll();
-    return await items.query(`SELECT c.game, c.scores FROM c WHERE ARRAY_CONTAINS(${JSON.stringify(resources)}, c._ts, false)`).fetchAll();
+    if (game) return await container().scripts.storedProcedure("getScoresByGame").execute([date], game);
+    return await container().scripts.storedProcedure("getLatestScores").execute([date]);
   } catch (error) {
     console.error('Error querying container:', error);
     throw error;
@@ -45,9 +44,7 @@ async function queryContainer(date, game) {
 
 async function hasContainerChanged(previousContinuationToken) {
   try {
-    const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
-
-    const { count, continuationToken } = await client.database(databaseId).container(containerId).items.getChangeFeedIterator({
+    const { count, continuationToken } = await container().items.getChangeFeedIterator({
       maxItemCount: 1, // We only need to know if there's at least one change
       changeFeedStartFrom: !previousContinuationToken ? ChangeFeedStartFrom.Now() : ChangeFeedStartFrom.Continuation(previousContinuationToken),
     }).readNext();
@@ -64,16 +61,14 @@ async function hasContainerChanged(previousContinuationToken) {
 app.http('V3', {
   methods: ['GET'],
   authLevel: 'anonymous',
-  handler: async (request, context) => {
-    console.log(request.params);
+  handler: async (request) => {
     try {
       const { stage, date, game } = request.params;
       const { hasChanged, continuationToken } = await hasContainerChanged(stage);
       const r = { stage: continuationToken };
       if (hasChanged) {
-        const { resources } = await queryContainer(date, game);
-        console.log(resources);
-        r.data = resources;
+        const { resource } = await queryContainer(date, game);
+        r.data = resource;
       }
       return { body: JSON.stringify(r) };
     } catch (error) {
@@ -89,13 +84,10 @@ app.http('V3', {
 app.http('V3p', {
   methods: ['POST'],
   authLevel: 'anonymous',
-  handler: async (request, context) => {
+  handler: async (request) => {
     try {
       const data = await request.json();
-      console.log(data);
-      const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
-      const { resource } = await client.database(databaseId).container(containerId).items.create(data);
-      console.log(resource);
+      const { resource } = await container().items.create(data);
       return { body: JSON.stringify(resource) };
     } catch (error) {
       console.error('Error creating item:', error);
