@@ -59,29 +59,40 @@ export default function view() {
         </div>
     `;
 
-    const game = (id, teams) => html`
-        <div data-game = ${teams[3]} class="rounded-xl ${teams[3]} m-1" @click=${async () => await controller?.gotoPage(id)} >
-            <div data-gamename class="text-lg italic font-bold tracking-widest text-white text-center leading-none">${teams[2]}</div>
-            <div class="grid grid-flow-col auto-cols-fr">
-                ${teams.slice(0, 2).map(x => team(x))}
-            </div>
-        </div>
-    `;
+    const game = (id, teams) => {
 
-    const heading = (s) => html`<div data-heading class="text-xs text-end font-bold text-blue-300 h-3"></div>`;
+        const teams1 = teams[2];
+
+        return {
+
+            setScores: (s) => teams1.map((v, i) => v.innerHTML = s.scores?.[i]),
+
+            view: html`
+                <div data-game = ${teams[3]} class="rounded-xl ${teams[3]} m-1" @click=${async () => await controller?.gotoPage(id)} >
+                    <div data-gamename class="text-lg italic font-bold tracking-widest text-white text-center leading-none">${teams1}</div>
+                    <div class="grid grid-flow-col auto-cols-fr">
+                        ${teams.slice(0, 2).map(x => team(x))}
+                    </div>
+                </div>
+            `
+        }
+    };
+
+    const heading = (s) => html`<div class="text-xs text-end font-bold text-blue-300 h-3"></div>`;
 
     const title = (s) => html`<div class="text-xl px-4 italic">${s}</div>`;
 
     const { htmlArray, date } = schedule(title, heading, game);
 
-    const dom = html`
+    const dom = {
+        view: html`
         <div class="mx-auto max-w-screen-sm">
             <div id="mainPage" style="display: none"> ${htmlArray} </div>
             <div id="entryPage" style="display: none"> ${scorePage} </div>
         </div>
-    `;
+    `};
 
-    render(dom, document.body);
+    render(dom.view, document.body);
 
     function setPastScores(s, e) { render(pastScores(s), e) };
 

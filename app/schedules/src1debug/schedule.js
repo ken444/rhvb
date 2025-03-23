@@ -2,11 +2,14 @@ export default function schedule(title, heading, game) {
 
     let date = '';
     let gameIndex = 0;
+    let games = [];
     const htmlArray = window.schedule.split('\n').map((e) => {
       let entry = e.split('\t');
       switch (entry[0]) {
         case 'g':
-          return game(`${gameIndex++}`, entry.slice(1))
+          const game1 = game(`${gameIndex++}`, entry.slice(1));
+          games.push(game1);
+          return game1.view;
         case 't':
           return heading(entry[1]);
         case 'h':
