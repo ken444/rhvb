@@ -10,6 +10,7 @@ export default function db() {
     
     let stage1 = '';
     let stage2 = '';
+    let stage3 = '';
 
     return {
 
@@ -31,7 +32,12 @@ export default function db() {
             const scores = await (await fetch(`${uri}/V3?date=${date}&game=${game}&stage=${force ? '' : stage2}`)).json();
             stage2 = scores.stage;
             return scores.data;
-        }
+        },
         
+        async changeFeed(date) {
+            const { continuation, ...rest } = await (await fetch(`${uri}/V4?date=${date}&stage=${stage3}`)).json();
+            stage3 = continuation;
+            return { ...rest };   
+        }
     }
 }

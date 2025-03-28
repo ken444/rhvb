@@ -1,73 +1,69 @@
 import createdb from "./db.js";
-import createvm from "./vm.js";
+import createview from "./view.js";
 
 export default function controller() {
-
     const db = createdb();
-    const vm = createvm();
+    const view = createview();
 
-    async function updatePastScores(force = false) {
-        const id = vm.getPage();
-        if (id) {
-            const scores = await db.getPastScores(view.date, id, force);
-            if (scores) vm.setPastScores(scores);
-        }
-    };
+    // Listener for the 'navigate' event
+    document.addEventListener('navigate', async (event) => {
+        const game = event.detail; // Retrieve game details from the event
+        gotoPage(game);
+    });
 
-    async function saveScore() {
-        const scores = vm.getEntry();
-        vm.setScores(scores);
+    // Listener for the 'save-score' event
+    document.addEventListener('save-score', async (event) => {
+        const scores = event.detail; // Retrieve scores from the event
+        await saveScore(scores);
+    });
+
+    async function saveScore(scores1) {
+        const scores = { scores1 };
+        view.setScores(scores);
         await db.saveScore(scores);
-        await gotoPage();
-    };
+        gotoPage();
+    }
 
     async function updateScores() {
-        const scores = await db.getScores(view.date);
-        await scores?.map(v => vm.setScores(v));
-    };
-
-    async function setPage(game) {
-        if (game) {
-            try {
-                //vm.entryGame window.getComputedStyle( document.body ,null).getPropertyValue('background-color')
-                
-                vm.setEntryTeams(game);
-                vm.setPage(game);
-                await updatePastScores(true);
-            } catch {
+        let complete = false;
+        let change = false;
+        do {
+            const r = await db.changeFeed(document.date);
+            if (r.items) {
+                r.items.map(v => document.allScores.push(v));
+                r.items.map(v => view.setScores(v));
+                change = true;
             }
-        } else {
-            vm.setPage();
-        }
-    };
+            complete = r.complete;
+        } while (!complete);
+        if (change) view.updatePastScores();
 
-    async function gotoPage(game) {
+    }
+
+    document.allScores = [];
+
+    function gotoPage(game) {
         if (game) {
             history.pushState({}, '', '#');
-            await setPage(game);
+            view.setPage(game);
         } else {
             history.back();
         }
-    };
+    }
 
     async function startup() {
+        view.setPage();
 
-        await setPage();
-
-        window.addEventListener("popstate", async () => await setPage());
+        window.addEventListener("popstate", () => view.setPage());
 
         await updateScores();
 
         setInterval(async () => {
             await updateScores();
-            await updatePastScores();
         }, 60000);
     }
 
     return {
-        gotoPage,
-        saveScore,
         startup
-    }
-
+    };
 }

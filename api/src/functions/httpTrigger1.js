@@ -1,4 +1,4 @@
-import { CosmosClient, ChangeFeedStartFrom } from '@azure/cosmos';
+import { CosmosClient, ChangeFeedStartFrom, StatusCodes } from '@azure/cosmos';
 import { app } from '@azure/functions';
 import dotenv from 'dotenv';
 
@@ -42,6 +42,24 @@ async function queryContainer(date, game) {
   }
 }
 
+async function changeFeed(date, continuationToken) {
+  try {
+    const iterator = container().items.getChangeFeedIterator({
+      changeFeedStartFrom: continuationToken ? ChangeFeedStartFrom.Continuation(continuationToken) : ChangeFeedStartFrom.Beginning(date)
+    });
+
+    const response = await iterator.readNext();
+
+    const items = response.result.map((item) => ({ game: item.game, scores: item.scores }));
+
+    return { continuation: response.continuationToken, complete: response.statusCode === StatusCodes.NotModified, items };
+
+  } catch (error) {
+    console.error('Error querying container:', error);
+    throw error;
+  }
+}
+
 async function hasContainerChanged(previousContinuationToken) {
   try {
     const { count, continuationToken } = await container().items.getChangeFeedIterator({
@@ -71,6 +89,23 @@ app.http('V3', {
         r.data = resource;
       }
       return { body: JSON.stringify(r) };
+    } catch (error) {
+      console.error('Error handling request:', error);
+      return {
+        status: 500,
+        body: error.message
+      };
+    }
+  }
+});
+
+app.http('V4', {
+  methods: ['GET'],
+  authLevel: 'anonymous',
+  handler: async (request) => {
+    try {
+      const { stage, date } = request.params;
+      return { body: JSON.stringify(await changeFeed(date, stage)) };
     } catch (error) {
       console.error('Error handling request:', error);
       return {
