@@ -8,7 +8,7 @@ export default function controller() {
     // Listener for the 'navigate' event
     document.addEventListener('navigate', async (event) => {
         const game = event.detail; // Retrieve game details from the event
-        gotoPage(game);
+        await gotoPage(game);
     });
 
     // Listener for the 'save-score' event
@@ -17,11 +17,11 @@ export default function controller() {
         await saveScore(scores);
     });
 
-    async function saveScore(scores1) {
-        const scores = { scores1 };
+    async function saveScore(scores) {
         view.setScores(scores);
         await db.saveScore(scores);
-        gotoPage();
+
+        await gotoPage();
     }
 
     async function updateScores() {
@@ -42,7 +42,8 @@ export default function controller() {
 
     document.allScores = [];
 
-    function gotoPage(game) {
+    async function gotoPage(game) {
+        await updateScores();
         if (game) {
             history.pushState({}, '', '#');
             view.setPage(game);
