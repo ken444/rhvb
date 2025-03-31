@@ -1,4 +1,5 @@
-import { html, render } from '/node_modules/lit-html/lit-html.js';
+//import { html, render, TemplateResult } from '/node_modules/lit-html/lit-html.js';
+import { html, render } from 'https://unpkg.com/lit@latest?module';
 
 export default function view() {
     // Utility function to render a template into a DocumentFragment
@@ -6,12 +7,6 @@ export default function view() {
         const fragment = document.createDocumentFragment();
         render(html(strings, ...values), fragment);
         return fragment.firstElementChild;
-    }
-
-    function htmlRColl(strings, ...values) {
-        const fragment = document.createDocumentFragment();
-        render(html(strings, ...values), fragment);
-        return fragment.childNodes;
     }
 
     const pastScoreLine = () => {
@@ -262,10 +257,9 @@ export default function view() {
             }
         });
 
-        return {
-            view,
-            setScores: (t) => games[t.game].setScores(t.scores),
-        };
+        const setScores = (t) => games[t.game]?.setScores(t.scores);
+
+        return { view, setScores };
     };
 
     // Component: DOM
