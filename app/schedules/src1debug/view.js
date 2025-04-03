@@ -1,4 +1,3 @@
-//import { html, render, TemplateResult } from '/node_modules/lit-html/lit-html.js';
 import { html, render } from 'https://unpkg.com/lit@latest?module';
 
 export default function view() {
@@ -20,13 +19,41 @@ export default function view() {
     // Component: Past Scores
     const pastScoresItem = () => {
         const lines = [pastScoreLine(), pastScoreLine()];
+        const view = htmlR`<div><div class="grid grid-flow-col auto-cols-fr">${lines.map(l => l.view)}</div></div>`;
         return {
-            view: htmlR`<div><div class="grid grid-flow-col auto-cols-fr">${lines.map(l => l.view)}</div></div>`,
-            setScores: (s) => s.map((v, i) => lines[i].setScore(v))
+            view,
+            setScores: (s) => lines.map((v, i) => v.setScore(s[i])),
+            hide: (v) => { if (v) view.style.display = 'none'; else view.style.display = 'block'; },
         };
     };
 
+    const myArray = (element, creatItem) => {   
+        const create = creatItem;
+        let arrayIndex = 0;
+
+        const add = (x) => {
+            if (arrayIndex == 0) {
+                const newChild = creatItem();
+                if (element.firstChild) {
+                    element.insertBefore(newChild.view, element.firstChild);
+                } else {
+                    element.appendChild(newChild.view);
+                }
+            }
+            const r = element.childNodes[arrayIndex];
+            r.x();
+            r.hide(false);
+            arrayIndex--;
+        }
+        const clear = () => {
+            element.childNodes.forEach((v) => v?.hide(true));
+            arrayIndex = element.childNodes.length;
+        }
+    }
+
     const pastScores = () => {
+
+        const my = myArray(pastScoresItem);
 
         let arrayIndex = 0;
         let displayIndex = 0;
@@ -57,7 +84,7 @@ export default function view() {
 
             arrayIndex = 0;
 
-            pastScores.forEach((v) => v.view.style.display = 'none');
+            pastScores.forEach((v) => v?.hide(true));
 
             displayIndex = 0;
 
@@ -80,7 +107,7 @@ export default function view() {
                         }
                     }
                     pastScores[displayIndex].setScores(x.scores);
-                    pastScores[displayIndex].view.style.display = 'block';
+                    pastScores[displayIndex].hide(false);
                     displayIndex++;
                     warn.style.display = 'block';
                 }
@@ -151,7 +178,7 @@ export default function view() {
     };
 
     // Component: Score Page
-    const scorePage = () => {
+    const scoreEntryPage = () => {
         const { view: view1, setEntry: setEntry1, getEntry, ...api } = innerScorePage();
         const { view: view2, setEntry: setEntry2, ...api2 } = pastScores();
 
@@ -266,7 +293,7 @@ export default function view() {
     const dom = () => {
 
         const { view: mainView, ...mainApi } = games();
-        const { view: entryView, setEntry, ...entryApi } = scorePage();
+        const { view: entryView, setEntry, ...entryApi } = scoreEntryPage();
 
         const mainPage = htmlR`<div style="display: none">${mainView}</div>`;
         const entryPage = htmlR`<div style="display: none">${entryView}</div>`;

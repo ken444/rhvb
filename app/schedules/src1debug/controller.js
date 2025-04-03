@@ -6,38 +6,27 @@ export default function controller() {
     const view = createview();
 
     // Listener for the 'navigate' event
-    document.addEventListener('navigate', async (event) => {
-        const game = event.detail; // Retrieve game details from the event
-        await gotoPage(game);
-    });
+    document.addEventListener('navigate', async (event) => await gotoPage(event.detail));
 
     // Listener for the 'save-score' event
     document.addEventListener('save-score', async (event) => {
-        const scores = event.detail; // Retrieve scores from the event
-        await saveScore(scores);
+        view.setScores(event.detail);
+        await db.saveScore(event.detail);
+        await gotoPage();
     });
 
-    async function saveScore(scores) {
-        view.setScores(scores);
-        await db.saveScore(scores);
-
-        await gotoPage();
-    }
-
     async function updateScores() {
-        let complete = false;
         let change = false;
-        do {
-            const r = await db.changeFeed(document.date);
-            if (r.items) {
-                r.items.map(v => document.allScores.push(v));
-                r.items.map(v => view.setScores(v));
+        while (true) {
+            const { items, complete } = await db.changeFeed(document.date);
+            if (items) {
+                items.map(v => document.allScores.push(v));
+                items.map(v => view.setScores(v));
                 change = true;
             }
-            complete = r.complete;
-        } while (!complete);
+            if (complete) break;
+        };
         if (change) view.updatePastScores();
-
     }
 
     document.allScores = [];
@@ -59,12 +48,8 @@ export default function controller() {
 
         await updateScores();
 
-        setInterval(async () => {
-            await updateScores();
-        }, 60000);
+        setInterval(async () => await updateScores(), 60000);
     }
 
-    return {
-        startup
-    };
+    return { startup };
 }
