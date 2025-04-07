@@ -19,11 +19,11 @@ export default function view() {
     // Component: Past Scores
     const pastScoresItem = () => {
         const lines = [pastScoreLine(), pastScoreLine()];
-        const view = htmlR`<div><div class="grid grid-flow-col auto-cols-fr">${lines.map(l => l.view)}</div></div>`;
+        const view = htmlR`<div class="grid grid-flow-col auto-cols-fr">${lines.map(l => l.view)}</div>`;
         return {
             view,
             setScores: (s) => lines.map((v, i) => v.setScore(s[i])),
-            hide: (v) => { if (v) view.style.display = 'none'; else view.style.display = 'block'; },
+            hide: (v) => view.style.display = v ? 'none' : ''
         };
     };
 
@@ -309,11 +309,11 @@ export default function view() {
             if (game) {
                 setEntry(game);
                 mainPage.style.display = 'none';
-                entryPage.style.display = 'block';
+                entryPage.style.display = '';
                 document.querySelector("input").focus();
             } else {
                 entryPage.style.display = 'none';
-                mainPage.style.display = 'block';
+                mainPage.style.display = '';
             }
         };
 
