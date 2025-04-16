@@ -35,7 +35,7 @@ export default function db() {
         
         async changeFeed(date) {
             try {
-                const response = await fetch(`${uri}/V4?date=${date}&stage=${stage3}`, {mode: 'no-cors'});
+                const response = await fetch(`${uri}/V4?date=${date}&stage=${stage3}`);
                 if (!response.ok) throw new Error(`Failed to fetch change feed: ${response.status} ${response.statusText}`);
 
                 const { continuation, ...rest } = await response.json();
