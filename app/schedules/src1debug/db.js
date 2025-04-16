@@ -1,10 +1,9 @@
 export default function db() {
 
-    //const puri = "https://rhvb568.azurewebsites.net";    
     const puri = "/api";    
 
-    //const devuri = "http://localhost:3000";
-    const devuri = puri;
+    const devuri = "https://www.rhvolleyball.com/api";
+
  
     const uri = window.location.hostname == '127.0.0.1' ?  devuri : puri;
     
@@ -35,9 +34,17 @@ export default function db() {
         },
         
         async changeFeed(date) {
-            const { continuation, ...rest } = await (await fetch(`${uri}/V4?date=${date}&stage=${stage3}`)).json();
-            stage3 = continuation;
-            return { ...rest };   
-        }
+            try {
+                const response = await fetch(`${uri}/V4?date=${date}&stage=${stage3}`, {mode: 'no-cors'});
+                if (!response.ok) throw new Error(`Failed to fetch change feed: ${response.status} ${response.statusText}`);
+
+                const { continuation, ...rest } = await response.json();
+                stage3 = continuation;
+                return { ...rest };
+            } catch (error) {
+                console.error("Error in changeFeed:", error);
+                throw error;
+            }
+        },
     }
 }

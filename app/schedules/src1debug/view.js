@@ -1,4 +1,5 @@
 import { html, render } from 'https://unpkg.com/lit@latest?module';
+import { h } from './h_function.js';
 
 export default function view() {
     // Utility function to render a template into a DocumentFragment
