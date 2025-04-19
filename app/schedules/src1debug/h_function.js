@@ -15,7 +15,13 @@
  */
 function h(tag, attrs, ...children) {
     // 1. Create the element
-    const element = document.createElement(tag);
+    // Determine if the element is an SVG element
+    const isSvg = tag === 'svg' || tag === 'path' || tag === 'rect' || tag === 'circle' || tag === 'line' || tag === 'g';
+
+    // Use the appropriate method for creating the element
+    const element = isSvg
+        ? document.createElementNS('http://www.w3.org/2000/svg', tag)
+        : document.createElement(tag);
 
     // 2. Set attributes and properties
     if (attrs) {

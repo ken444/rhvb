@@ -5,6 +5,8 @@ export default function controller() {
     const db = createdb();
     const view = createview();
 
+    document.body.appendChild(view.view);
+
     // Listener for the 'navigate' event
     document.addEventListener('navigate', async (event) => await gotoPage(event.detail));
 
