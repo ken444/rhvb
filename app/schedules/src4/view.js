@@ -117,7 +117,7 @@ export default function view() {
         const entryScore = h('input',
             {
                 type: 'number',
-                className: "form-input rounded-xl m-4 p-2 w-1/2 justify-self-end text-right font-medium text-3xl leading-none bg-white focus:ring-8 ring-red-400 ring-offset-4"
+                className: "form-input rounded-xl m-4 p-2 w-1/2 justify-self-end text-right leading-none bg-white focus:ring-8 ring-black ring-offset-4"
             }
         );
 
