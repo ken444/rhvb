@@ -174,7 +174,9 @@ export default function view() {
     
         const saveButton = h('div', {
             tabindex: "0",
-            className: "text-4xl text-center p-4 m-4 font-semibold text-white bg-blue-600 border-b-4 border-blue-800 rounded-3xl shadow-xl cursor-pointer hover:bg-blue-700",
+            text: "4xl center white",
+            border: "b-4 blue-800",
+            className: "p-4 m-4 font-semibold rounded-3xl shadow-xl cursor-pointer bg-blue-600 hover:bg-blue-700",
             onclick: () => {
                 document.dispatchEvent(new CustomEvent('save-score', {
                     detail: { date: document.date, game: id, scores: getEntry() }
