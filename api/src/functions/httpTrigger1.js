@@ -24,7 +24,7 @@ async function createContainer() {
   const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
   const partitionKey = { kind: 'Hash', paths: ['/date'] }
   const { container } = await client.database(databaseId).containers.createIfNotExists({ id: containerId, partitionKey });
-  console.log(`Created container:\n${_container.id}\n`)
+  console.log(`Created container:\n${container.id}\n`)
 }
 
 function container() {
