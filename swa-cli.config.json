@@ -1,0 +1,12 @@
+{
+  "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
+  "configurations": {
+    "default": {
+      "appLocation": "app",
+      "apiLocation": "api",
+      "port": 4283,
+      "host": "localhost",
+      "apiPort": 7073
+    }
+  }
+}
