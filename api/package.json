@@ -8,8 +8,7 @@
   },
   "dependencies": {
     "@azure/cosmos": "^4.2.0",
-    "@azure/functions": "^4.0.0",
-    "dotenv": "^16.4.7"
+    "@azure/functions": "^4.0.0"
   },
   "main": "src/{index.js,functions/*.js}",
   "type": "module"

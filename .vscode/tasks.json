@@ -2,14 +2,27 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "func",
-			"label": "func: host start",
-			"command": "host start",
-			"problemMatcher": "$func-node-watch",
+			"label": "Start SWA (Static Content + API)",
+			"type": "shell",
+			"command": "swa",
+			"args": [
+				"start",
+				"app",
+				"--api-location",
+				"./api",
+				"--func-args",
+				"--language-worker -- --inspect=9229"
+			],
 			"isBackground": true,
-			"dependsOn": "npm install (functions)",
-			"options": {
-				"cwd": "${workspaceFolder}/api"
+			"problemMatcher": {
+				"pattern": {
+					"regexp": "Debugger listening on ws://.*"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "Azure Functions Core Tools",
+					"endsPattern": "Debugger listening on ws://.*"
+				}
 			}
 		},
 		{
