@@ -79,3 +79,17 @@ export async function hasContainerChanged(previousContinuationToken) {
 export async function createItemInContainer(item) {
   return getContainerClient().items.create(item);
 }
+
+/**
+ * Fetches all items from the container.
+ * @returns {Promise<Array<any>>} A promise that resolves to an array of items.
+ */
+export async function getItemsFromContainer() {
+  try {
+    const { resources: items } = await getContainerClient().items.readAll().fetchAll();
+    return items;
+  } catch (error) {
+    console.error('Error fetching items from container:', error);
+    throw error; // Re-throw the error to be handled by the caller
+  }
+}

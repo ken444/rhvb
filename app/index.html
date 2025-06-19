@@ -1,29 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Vanilla JavaScript App</title>
+</head>
 
 <body>
-    <h1>Hello World from RHVB 1</h1>
     <main>
-        <h1>Vanilla JavaScript App</h1>
-        <p>Loading content from my API: <b id="name">...</b></p>
+    <h1>Vanilla JavaScript App, hello</h1>
+    <p>Loading content from the API: <b id="name">...</b></p>
+    <a href="index1.html">Go to Index 1</a>
     </main>
 
     <script>
-        (async function () {
-            const a = await fetch(`/api/httpTrigger2?tt=2343&name=123Ken C&date=1234`);
-            const { text } = await a.json();
-            document.querySelector('#name').textContent = text;
-
-            console.log('fetching data from another function');
-
-            const b = await fetch(`/api/httpTrigger3?tt=2343&name=123Ken C&date=1234`);
-
-            document.querySelector('#name').textContent = await b.text();
-
-            console.log(b);
-        }());
+    (async function() {
+        const text = await(await fetch(`/api/message`)).text();
+        document.querySelector('#name').textContent = text;
+    }());
     </script>
-        <script type="module" src="src1debug/app.js" defer></script>
 </body>
 
 </html>
