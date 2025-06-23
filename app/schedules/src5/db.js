@@ -2,11 +2,6 @@ export default function db() {
 
     const puri = "/api";    
 
-    const devuri = "http://localhost:4280/api";
-
- 
-    const uri = window.location.hostname == '127.0.0.1' ?  devuri : puri;
-    
     let stage1 = '';
     let stage2 = '';
     let stage3 = '';
