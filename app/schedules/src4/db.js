@@ -1,6 +1,6 @@
 export default function db() {
 
-    const puri = "/api";    
+    const uri = "/api";    
     
     let stage1 = '';
     let stage2 = '';
