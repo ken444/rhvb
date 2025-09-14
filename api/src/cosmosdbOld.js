@@ -1,9 +1,9 @@
 import { CosmosClient, ChangeFeedStartFrom, StatusCodes } from '@azure/cosmos';
 
 const databaseId = 'volleyball';
-const containerId = 'scores';
+const containerId = 'Scores';
 
-const client = new CosmosClient(process.env.COSMOSDB2_CONNECTION_STRING);
+const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
 const database = client.database(databaseId);
 const containerClient = database.container(containerId);
 

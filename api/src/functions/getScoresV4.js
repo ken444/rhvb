@@ -1,5 +1,5 @@
 import { app } from '@azure/functions';
-import { changeFeed }  from '../cosmosdb.js';
+import { changeFeed }  from '../cosmosdbOld.js';
 
 app.http('V4', {
   methods: ['GET'],

@@ -1,5 +1,5 @@
 import { app } from '@azure/functions';
-import { getItemsFromContainer } from '../cosmosdb.js';
+import { getItemsFromContainer } from '../cosmosdbOld.js';
 
 app.http('getScoresData', {
     methods: ['GET'],

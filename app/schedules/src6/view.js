@@ -165,7 +165,7 @@ export default function view() {
         let id = null;
     
         const closeButton = h('div', {
-            className: "w-1/6 justify-self-end",
+            className: "w-1/6 justify-self-end flex items-center",
             onclick: () => {
                 const event = new CustomEvent('navigate', { detail: null });
                 document.dispatchEvent(event);
@@ -174,9 +174,7 @@ export default function view() {
     
         const saveButton = h('div', {
             tabindex: "0",
-            text: "4xl center white",
-            border: "b-4 blue-800",
-            className: "p-4 m-4 font-semibold rounded-3xl shadow-xl cursor-pointer bg-blue-600 hover:bg-blue-700",
+            className: "text-4xl text-center p-4 m-4 font-semibold text-white bg-blue-600 border-b-4 border-blue-800 rounded-3xl shadow-xl cursor-pointer hover:bg-blue-700",
             onclick: () => {
                 document.dispatchEvent(new CustomEvent('save-score', {
                     detail: { date: document.date, game: id, scores: getEntry() }
@@ -202,14 +200,14 @@ export default function view() {
 
     // Component: Team
     const team = (t) => {
-        const scoreText = d("justify-self-end");
-        const view = d("px-3 font-medium text-3xl leading-none grid grid-cols-[auto_1fr] gap-4", [
-            d("pb-2 truncate", t),
+        const scoreText = d();
+        const view = d("px-3 font-medium text-3xl leading-none flex", [
+            d("pb-2 flex-1 truncate", t),
             scoreText
         ]);
-    
+
         const setScore = (s) => scoreText.innerText = s;
-    
+
         return { view, setScore };
     };
 

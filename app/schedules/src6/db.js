@@ -1,7 +1,7 @@
 export default function db() {
 
-    const puri = "/api";    
-
+    const uri = "/api";    
+    
     let stage1 = '';
     let stage2 = '';
     let stage3 = '';
@@ -9,7 +9,7 @@ export default function db() {
     return {
 
         async saveScore(x) {
-            await fetch(`${uri}/V3p`, {
+            await fetch(`${uri}/V5p`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json;charset=utf-8' },
                 body: JSON.stringify(x)
@@ -17,20 +17,20 @@ export default function db() {
         },
 
         async getScores(date) {
-            const scores = await (await fetch(`${uri}/V3?date=${date}&stage=${stage1}`)).json();
+            const scores = await (await fetch(`${uri}/V5g?date=${date}&stage=${stage1}`)).json();
             stage1 = scores.stage;
             return scores.data;
         },
 
         async getPastScores(date, game, force) {
-            const scores = await (await fetch(`${uri}/V3?date=${date}&game=${game}&stage=${force ? '' : stage2}`)).json();
+            const scores = await (await fetch(`${uri}/V5g?date=${date}&game=${game}&stage=${force ? '' : stage2}`)).json();
             stage2 = scores.stage;
             return scores.data;
         },
         
         async changeFeed(date) {
             try {
-                const response = await fetch(`${uri}/V4?date=${date}&stage=${stage3}`);
+                const response = await fetch(`${uri}/V5?date=${date}&stage=${stage3}`);
                 if (!response.ok) throw new Error(`Failed to fetch change feed: ${response.status} ${response.statusText}`);
 
                 const { continuation, ...rest } = await response.json();

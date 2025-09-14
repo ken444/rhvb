@@ -1,5 +1,5 @@
 import { app } from '@azure/functions';
-import { queryContainer, hasContainerChanged } from '../cosmosdb.js';
+import { queryContainer, hasContainerChanged } from '../cosmosdbOld.js';
 
 app.http('V3', {
   methods: ['GET'],
