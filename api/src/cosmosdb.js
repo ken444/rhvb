@@ -4,41 +4,12 @@ const databaseId = 'volleyball';
 const containerId = 'scores';
 
 const client = new CosmosClient(process.env.COSMOSDB2_CONNECTION_STRING);
-const database = client.database(databaseId);
-const containerClient = database.container(containerId);
-
-/**
- * Create the database if it does not exist
- */
-export async function createDatabase() {
-  const { database: db } = await client.databases.createIfNotExists({ id: databaseId });
-  console.log(`Created database:\n${db.id}\n`);
-  return db;
-}
-
-/**
- * Create the container if it does not exist
- */
-export async function createContainer() {
-  const partitionKey = { kind: 'Hash', paths: ['/FOS'] };
-  const { container } = await database.containers.createIfNotExists({ id: containerId, partitionKey });
-  console.log(`Created container:\n${container.id}\n`);
-  return container;
-}
-
-/**
- * Gets the Cosmos DB container client.
- * @returns {import('@azure/cosmos').Container} The container client.
- */
-export function getContainerClient() {
-  return containerClient;
-}
+const containerClient = client.database(databaseId).container(containerId);
 
 export async function queryContainer(date, game) {
   try {
-    const currentContainer = getContainerClient();
-    if (game) return await currentContainer.scripts.storedProcedure("getScoresByGame").execute([date], game);
-    return await currentContainer.scripts.storedProcedure("getLatestScores").execute([date]);
+    if (game) return await containerClient.scripts.storedProcedure("getScoresByGame").execute([date], game);
+    return await containerClient.scripts.storedProcedure("getLatestScores").execute([date]);
   } catch (error) {
     console.error('Error querying container:', error);
     throw error;
@@ -47,7 +18,7 @@ export async function queryContainer(date, game) {
 
 export async function changeFeed(date, continuationToken) {
   try {
-    const iterator = getContainerClient().items.getChangeFeedIterator({
+    const iterator = containerClient.items.getChangeFeedIterator({
       changeFeedStartFrom: continuationToken ? ChangeFeedStartFrom.Continuation(continuationToken) : ChangeFeedStartFrom.Beginning(date)
     });
 
@@ -63,7 +34,7 @@ export async function changeFeed(date, continuationToken) {
 
 export async function hasContainerChanged(previousContinuationToken) {
   try {
-    const { count, continuationToken } = await getContainerClient().items.getChangeFeedIterator({
+    const { count, continuationToken } = await containerClient.items.getChangeFeedIterator({
       maxItemCount: 1, // We only need to know if there's at least one change
       changeFeedStartFrom: !previousContinuationToken ? ChangeFeedStartFrom.Now() : ChangeFeedStartFrom.Continuation(previousContinuationToken),
     }).readNext();
@@ -77,7 +48,7 @@ export async function hasContainerChanged(previousContinuationToken) {
 }
 
 export async function createItemInContainer(item) {
-  return getContainerClient().items.create(item);
+  return containerClient.items.create(item);
 }
 
 /**
@@ -86,7 +57,7 @@ export async function createItemInContainer(item) {
  */
 export async function getItemsFromContainer() {
   try {
-    const { resources: items } = await getContainerClient().items.readAll().fetchAll();
+    const { resources: items } = await containerClient.items.readAll().fetchAll();
     return items;
   } catch (error) {
     console.error('Error fetching items from container:', error);
