@@ -1,9 +1,9 @@
 import { CosmosClient, ChangeFeedStartFrom, StatusCodes } from '@azure/cosmos';
 
 const databaseId = 'volleyball';
-const containerId = 'Scores';
+const containerId = 'scores';
 
-const client = new CosmosClient(process.env.COSMOSDB_CONNECTION_STRING);
+const client = new CosmosClient(process.env.COSMOSDB2_CONNECTION_STRING);
 const containerClient = client.database(databaseId).container(containerId);
 
 export async function queryContainer(date, game) {
