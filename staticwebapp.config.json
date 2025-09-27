@@ -1,0 +1,19 @@
+{
+  "routes": [
+    {
+      "route": "/am",
+      "redirect": "https://maps.app.goo.gl/2oxdPHN351hEuPPL9",
+      "statusCode": 301
+    },
+    {
+      "route": "/olqw",
+      "redirect": "https://maps.app.goo.gl/SnXnfKTE2sFbECQj9",
+      "statusCode": 302
+    }
+  ],
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/404.html"
+    }
+  }
+}
