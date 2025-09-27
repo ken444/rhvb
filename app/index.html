@@ -1,26 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Vanilla JavaScript App</title>
+    <meta charset="utf-8" />
+    <title>Volleyball Event - Pay with Stripe</title>
+    <meta name="description" content="A demo of a payment form" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
-    <main>
-    <h1>Vanilla JavaScript App, hello</h1>
-    <p>Loading content from the API: <b id="name">...</b></p>
-    <a href="index1.html">Go to Index 1</a>
-    </main>
+    <div class="container">
+        <h1>Volleyball Event Registration</h1>
+        <p>Entry Fee: $25.00</p>
+
+        <!-- The payment form will be rendered here by Stripe -->
+        <form id="payment-form">
+            <!-- This is where the Google Pay/Apple Pay button will be rendered -->
+            <div id="express-checkout-element"></div>
+
+            <div class="form-separator"><span>OR PAY MANUALLY</span></div>
+
+            <input type="text" id="player-name" placeholder="Full Name" required />
+            <!-- The Link Authentication Element will be rendered here -->
+            <div id="link-authentication-element"></div>
+
+            <div id="payment-element"></div>
+            <button id="submit-button" class="button">
+                <div class="spinner hidden" id="spinner"></div>
+                <span id="button-text">Pay now</span>
+            </button>
+            <div id="payment-message" class="hidden"></div>
+        </form>
+    </div>
 
     <script>
-    (async function() {
-        const text = await(await fetch(`/api/message`)).text();
-        document.querySelector('#name').textContent = text;
-    }());
+        // Make sure to use your Stripe PUBLISHABLE key
+        const stripe = Stripe("pk_test_..."); 
+
+        let elements;
+
+        initialize();
+
+        document
+            .querySelector("#payment-form")
+            .addEventListener("submit", handleSubmit);
+
+        // Fetches a payment intent and captures the client secret
+        async function initialize() {
+            // Get the player's name and email from the form
+            const playerName = document.querySelector("#player-name").value;
+            // The email will be collected by the LinkAuthenticationElement
+            
+            // Call your Azure Function backend
+            const response = await fetch("/api/createPaymentIntent", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ playerName: "Player Name Placeholder", email: "email@placeholder.com" }) // We will update this later
+            });
+            const { clientSecret } = await response.json();
+
+            const appearance = { theme: 'stripe' };
+            elements = stripe.elements({ appearance, clientSecret });
+
+            // Create and mount the Link Authentication Element to collect email
+            const linkAuthenticationElement = elements.create("linkAuthentication");
+            linkAuthenticationElement.mount("#link-authentication-element");
+
+            // Create and mount the Express Checkout Element
+            const expressCheckoutElement = elements.create("expressCheckout");
+            expressCheckoutElement.mount("#express-checkout-element");
+            
+            // This event fires after the Express Checkout Element has loaded and decided whether to show up.
+            elements.on('loadercomplete', (event) => {
+                // Check if the Express Checkout Element is actually visible on the page.
+                const expressCheckoutNode = document.querySelector('#express-checkout-element');
+                if (expressCheckoutNode && expressCheckoutNode.children.length > 0) {
+                    document.querySelector('.form-separator').classList.remove('hidden');
+                }
+            });
+
+            // When a user confirms via Google/Apple Pay, update the Payment Intent with their name
+            expressCheckoutElement.on('confirm', async (event) => {
+                const nameInput = document.querySelector("#player-name");
+                if (!nameInput.value) {
+                    // You could show an error here if the name is required for express payments too
+                    console.log("Player name is missing.");
+                }
+
+                // Update the Payment Intent on the backend with the real player name
+                await fetch('/api/updatePaymentIntent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ clientSecret: clientSecret, playerName: nameInput.value })
+                });
+            });
+
+            // Create and mount the regular Payment Element
+            const paymentElement = elements.create("payment");
+            paymentElement.mount("#payment-element");
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            setLoading(true);
+
+            const nameInput = document.querySelector("#player-name");
+            if (!nameInput.value) {
+                showMessage("Please enter your full name.");
+                setLoading(false);
+                return;
+            }
+
+            // Before confirming, update the Payment Intent with the real player name and email
+            const emailElement = elements.getElement('linkAuthentication');
+            const email = (await emailElement.getValue()).email;
+
+            await fetch('/api/updatePaymentIntent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ clientSecret: clientSecret, playerName: nameInput.value, email: email })
+            });
+
+            const { error } = await stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    // Make sure to change this to the URL of your post-payment confirmation page
+                    return_url: `${window.location.origin}/public/complete.html`,
+                }
+            });
+
+            // This point will only be reached if there is an immediate error when
+            // confirming the payment. Otherwise, your customer will be redirected to
+            // your `return_url`.
+            if (error.type === "card_error" || error.type === "validation_error") {
+                showMessage(error.message);
+            } else {
+                showMessage("An unexpected error occurred.");
+            }
+
+            setLoading(false);
+        }
+
+        // ------- UI helpers -------
+        function showMessage(messageText) {
+            document.querySelector("#payment-message").classList.remove("hidden");
+            document.querySelector("#payment-message").textContent = messageText;
+            setTimeout(() => { document.querySelector("#payment-message").classList.add("hidden"); }, 4000);
+        }
+
+        function setLoading(isLoading) {
+            document.querySelector("#submit-button").disabled = isLoading;
+            document.querySelector("#spinner").classList.toggle("hidden", !isLoading);
+            document.querySelector("#button-text").classList.toggle("hidden", isLoading);
+        }
     </script>
 </body>
-
 </html>

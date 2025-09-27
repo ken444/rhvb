@@ -1,0 +1,207 @@
+/* General Body Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Main Container for the Event and Payment Form */
+.event-container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Header Section */
+.event-header {
+    background-color: #007bff;
+    color: white;
+    padding: 24px;
+    text-align: center;
+}
+
+.event-header h1 {
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+/* Event Details Section */
+.event-details {
+    padding: 24px;
+    border-bottom: 1px solid #e6ebf1;
+}
+
+.event-details p {
+    margin: 0 0 12px 0;
+    font-size: 1rem;
+    color: #334155;
+}
+
+.event-details p:last-child {
+    margin-bottom: 0;
+}
+
+.event-details strong {
+    color: #0f172a;
+}
+
+/* Payment Form Styles */
+#payment-form {
+    padding: 24px;
+}
+
+#payment-form h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.25rem;
+    color: #334155;
+}
+
+/* Express Checkout Element will be injected here */
+#express-checkout-element {
+    margin-bottom: 20px;
+}
+
+/* Separator between express and manual payment */
+.form-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #64748b;
+    margin: 20px 0;
+}
+
+.form-separator::before,
+.form-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.form-separator span {
+    padding: 0 10px;
+}
+
+/* Style for the new Name input field */
+#player-name {
+    font-size: 16px;
+    width: 100%;
+    padding: 11px;
+    margin-bottom: 20px;
+    border: 1px solid #e6ebf1;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Stripe Link Authentication Element will be injected here */
+#link-authentication-element {
+    margin-bottom: 20px;
+}
+
+/* Stripe Payment Element will be injected here */
+#payment-element {
+    margin-bottom: 24px;
+}
+
+/* Pay Button Styles */
+.button {
+    background: #007bff;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+    border-radius: 4px;
+    border: 0;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: block;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.button:hover {
+    filter: contrast(115%);
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* Spinner animation */
+.spinner,
+.spinner:before,
+.spinner:after {
+    border-radius: 50%;
+}
+
+.spinner {
+    color: #ffffff;
+    font-size: 22px;
+    text-indent: -99999px;
+    margin: 0px auto;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    box-shadow: inset 0 0 0 2px;
+    transform: translateZ(0);
+}
+
+.spinner:before,
+.spinner:after {
+    position: absolute;
+    content: "";
+}
+
+.spinner:before {
+    width: 10.4px;
+    height: 20.4px;
+    background: #007bff;
+    border-radius: 20.4px 0 0 20.4px;
+    top: -0.2px;
+    left: -0.2px;
+    transform-origin: 10.4px 10.2px;
+    animation: loading 2s infinite ease 1.5s;
+}
+
+.spinner:after {
+    width: 10.4px;
+    height: 10.2px;
+    background: #007bff;
+    border-radius: 0 10.2px 10.2px 0;
+    top: -0.1px;
+    left: 10.2px;
+    transform-origin: 0px 10.2px;
+    animation: loading 2s infinite ease;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* General utility classes */
+.hidden {
+    display: none;
+}
+
+#payment-message {
+    color: rgb(105, 115, 134);
+    font-size: 16px;
+    line-height: 20px;
+    padding-top: 12px;
+    text-align: center;
+}
