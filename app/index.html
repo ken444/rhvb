@@ -6,6 +6,7 @@
     <meta name="description" content="A demo of a payment form" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 
@@ -44,7 +45,7 @@
 
     <script>
         // Make sure to use your Stripe PUBLISHABLE key
-        const stripe = Stripe("pk_test_..."); // Replace with your actual publishable key
+        const stripe = Stripe("pk_live_51M2zT9DGxNp2MxlD7KERl0dWxlDV7jWbRjVHzQgUdhf988eRvT12jnSSjubBt5Kszd0boCdHKRPrLXgGuhIppkGd00SkNWpXVg"); // Replace with your actual publishable key
 
         let elements;
 
@@ -59,7 +60,7 @@
             // Get the player's name and email from the form
             const playerName = document.querySelector("#player-name").value;
             // The email will be collected by the LinkAuthenticationElement
-            
+
             // Call your Azure Function backend
             const response = await fetch("/api/createPaymentIntent", {
                 method: "POST",
