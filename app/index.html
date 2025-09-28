@@ -10,17 +10,25 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Volleyball Event Registration</h1>
-        <p>Entry Fee: $25.00</p>
+    <div class="event-container">
+        <div class="event-header">
+            <!-- You can add a logo here, e.g., <img src="volleyball_logo.png" alt="Event Logo"> -->
+            <h1>Beach Volleyball Tournament</h1>
+        </div>
+        <div class="event-details">
+            <p><strong>Date:</strong> Saturday, August 24, 2024</p>
+            <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+            <p><strong>Location:</strong> Sunnyvale Beach Courts</p>
+        </div>
 
         <!-- The payment form will be rendered here by Stripe -->
         <form id="payment-form">
             <!-- This is where the Google Pay/Apple Pay button will be rendered -->
             <div id="express-checkout-element"></div>
 
-            <div class="form-separator"><span>OR PAY MANUALLY</span></div>
+            <div class="form-separator hidden"><span>OR PAY MANUALLY</span></div>
 
+            <h2>Registration Fee: $5.00 CAD</h2>
             <input type="text" id="player-name" placeholder="Full Name" required />
             <!-- The Link Authentication Element will be rendered here -->
             <div id="link-authentication-element"></div>
@@ -36,7 +44,7 @@
 
     <script>
         // Make sure to use your Stripe PUBLISHABLE key
-        const stripe = Stripe("pk_test_..."); 
+        const stripe = Stripe("pk_test_..."); // Replace with your actual publishable key
 
         let elements;
 
@@ -126,7 +134,7 @@
                 elements,
                 confirmParams: {
                     // Make sure to change this to the URL of your post-payment confirmation page
-                    return_url: `${window.location.origin}/public/complete.html`,
+                    return_url: `${window.location.origin}/complete.html`,
                 }
             });
 

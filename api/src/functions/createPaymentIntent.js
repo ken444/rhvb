@@ -5,7 +5,7 @@ import { app } from '@azure/functions';
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const VOLLEYBALL_EVENT_COST = 2500; // Cost in cents ($25.00)
+const VOLLEYBALL_EVENT_COST = 500; // Cost in cents ($5.00)
 
 app.http('createPaymentIntent', {
     methods: ['POST'],
@@ -22,7 +22,7 @@ app.http('createPaymentIntent', {
             // Create a PaymentIntent with the order amount and currency
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: VOLLEYBALL_EVENT_COST,
-                currency: 'usd',
+                currency: 'cad',
                 receipt_email: email,
                 automatic_payment_methods: {
                     enabled: true,
