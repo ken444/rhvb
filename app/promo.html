@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RHVb - Richmond Hill Co-ed Volleyball League</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global Reset and Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Color Palette Variables */
+        :root {
+            --primary-blue: #1A237E;  /* Deep Blue */
+            --secondary-gold: #FFC107; /* Bright Gold */
+            --text-dark: #333;
+            --text-light: #f4f4f4;
+            --background-light: #ffffff;
+            --background-dark: #222;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: var(--background-light);
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-blue);
+        }
+
+        /* Header/Navigation */
+        header {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+       .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--secondary-gold);
+        }
+
+        nav a {
+            color: var(--text-light);
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--secondary-gold);
+        }
+
+        /* CTA Button Styling */
+       .cta-button {
+            background-color: var(--secondary-gold);
+            color: var(--primary-blue);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 700;
+            transition: background-color 0.3s;
+        }
+
+       .cta-button:hover {
+            background-color: #ffdb58; /* Slightly lighter gold */
+        }
+
+        /* Hero Section */
+       .hero {
+            /* Placeholder: Replace with actual image URL */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('placeholder-volleyball-image.jpg') no-repeat center center/cover;
+            height: 80vh; /* Increased height for prominence */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+       .hero-content h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+       .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+       .cta-button.large {
+            font-size: 1.1em;
+            padding: 15px 30px;
+        }
+
+        /* General Section Styling */
+        section {
+            padding: 60px 5%;
+            text-align: center;
+        }
+        
+        section h2 {
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            font-size: 2.2em;
+        }
+
+        /* League Breakdown Section */
+       .league-breakdown {
+            background-color: var(--background-light);
+        }
+
+       .sub-heading {
+            font-size: 1.1em;
+            color: var(--text-dark);
+            margin-bottom: 40px;
+        }
+
+       .schedule-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+       .night-card {
+            background-color: #f8f8f8;
+            border: 2px solid var(--primary-blue);
+            border-radius: 10px;
+            padding: 30px;
+            width: 45%;
+            max-width: 450px;
+            text-align: left;
+        }
+
+       .night-card h3 {
+            color: var(--secondary-gold);
+            background-color: var(--primary-blue);
+            padding: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+       .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+       .stat-item {
+            text-align: center;
+        }
+
+       .stat-number {
+            display: block;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+       .stat-label {
+            font-size: 0.9em;
+            color: var(--text-dark);
+        }
+
+       .tier-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+
+       .tier-list li {
+            padding: 5px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        /* About Section */
+       .about-us {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+        }
+
+       .about-us h2 {
+            color: var(--secondary-gold);
+        }
+
+       .secondary-button {
+            color: var(--secondary-gold);
+            border: 2px solid var(--secondary-gold);
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+       .secondary-button:hover {
+            background-color: var(--secondary-gold);
+            color: var(--primary-blue);
+        }
+
+        /* Registration Section */
+       .registration {
+            background-color: #e8f0fe; /* Light Blue/Gray Background */
+        }
+        
+       .registration h2 {
+             color: var(--text-dark);
+        }
+        
+       .registration p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+
+        /* Contact Section */
+       .contact {
+            background-color: var(--background-dark);
+            color: var(--text-light);
+        }
+        
+       .contact h2 {
+            color: var(--secondary-gold);
+        }
+        
+       .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            font-size: 1.1em;
+        }
+        
+       .contact-info a {
+            color: var(--secondary-gold);
+            transition: color 0.3s;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--background-dark);
+            color: #aaa;
+            text-align: center;
+            padding: 20px 5%;
+            font-size: 0.9em;
+            border-top: 1px solid #333;
+        }
+
+        footer a {
+            color: #aaa;
+            text-decoration: underline;
+        }
+
+       .domain {
+            margin-top: 5px;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+
+        /* Responsive Design */
+       .menu-toggle { display: none; } /* Hide toggle button on desktop */
+        
+        @media (max-width: 900px) {
+           .hero { height: 50vh; }
+           .hero-content h1 { font-size: 2.2em; }
+            
+            nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary-blue);
+                padding: 10px 0;
+            }
+
+            nav a {
+                margin: 5px 0;
+                padding: 10px 5%;
+                text-align: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+           .nav-open { display: flex; }
+           .menu-toggle {
+                display: block;
+                background: none;
+                border: none;
+                color: var(--secondary-gold);
+                font-size: 1.5em;
+                cursor: pointer;
+            }
+
+           .schedule-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+
+           .night-card {
+                width: 100%;
+                max-width: none;
+                margin-bottom: 20px;
+            }
+            
+           .contact-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">RHVb</div>
+        <nav>
+            <a href="#top">Home</a>
+            <a href="#league-nights">Schedule</a>
+            <a href="#about">About</a>
+            <a href="#register" class="cta-button">Register</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <button class="menu-toggle">☰</button>
+    </header>
+
+    <section id="top" class="hero">
+        <div class="hero-content">
+            <h1>Richmond Hill's Premier Co-ed Volleyball League</h1>
+            <p>Your court. Your community. Your game. Join RHVb for competitive and social play in the GTA.</p>
+            <a href="#register" class="cta-button large">Find Your Team & Register Today!</a>
+        </div>
+    </section>
+
+    <section id="league-nights" class="league-breakdown">
+        <h2>Our Co-ed League Nights</h2>
+        <p class="sub-heading">We offer competitive and recreational tiers on two different nights to fit your schedule.</p>
+        
+        <div class="schedule-grid">
+            <div class="night-card">
+                <h3>Wednesday League</h3>
+                <p class="location">Richmond Hill Venue - All Games @ 7:00 PM</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">9</span>
+                        <span class="stat-label">Teams Compete</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Skill Tiers</span>
+                    </div>
+                </div>
+                <ul class="tier-list">
+                    <li>Tier 1: Co-ed Advanced</li>
+                    <li>Tier 2: Co-ed Intermediate</li>
+                    <li>Tier 3: Co-ed Recreational</li>
+                </ul>
+            </div>
+
+            <div class="night-card">
+                <h3>Thursday League</h3>
+                <p class="location">Richmond Hill Venue - All Games @ 8:00 PM</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">Teams Compete</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Skill Tiers</span>
+                    </div>
+                </div>
+                <ul class="tier-list">
+                    <li>Tier 1: Co-ed Advanced</li>
+                    <li>Tier 2: Co-ed Intermediate A</li>
+                    <li>Tier 3: Co-ed Intermediate B</li>
+                    <li>Tier 4: Co-ed Recreational</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-us">
+        <h2>The RHVb Community</h2>
+        <p>Founded by passionate local players, RHVb is dedicated to fostering a friendly and well-organized environment where every serve, set, and spike brings people together. We are committed to balanced play and community growth in Richmond Hill.</p>
+        <a href="#contact" class="secondary-button">Ask a Question</a>
+    </section>
+    
+    <section id="register" class="registration">
+        <h2>Ready to Play? Register for the Next Season!</h2>
+        <p>Registration for the upcoming season is now open. Secure your spot as a free agent or register your full team (co-ed minimums apply).</p>
+        <p>For more details on fees, waivers, and key dates, please follow the link below.</p>
+        <a href="#" class="cta-button large">View Registration Details & Sign Up</a>
+        <p style="margin-top: 15px; font-size: 0.9em; color: var(--text-dark);">Registration is managed via a dedicated third-party platform for security and efficiency.</p>
+    </section>
+    
+    <section id="contact" class="contact">
+        <h2>Get in Touch</h2>
+        <div class="contact-info">
+            <p>Email: <a href="mailto:info@rhvolleyball.com">info@rhvolleyball.com</a></p>
+            <p>Phone: (905) 555-RHCB</p>
+        </div>
+        <p style="margin-top: 25px;">Follow us on social media for updates and game highlights!</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 RHVb. All rights reserved. | <a href="#contact">Contact Us</a></p>
+        <p class="domain">rhvolleyball.com</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.querySelector('nav');
+
+            if (menuToggle && nav) {
+                // Toggle mobile navigation visibility
+                menuToggle.addEventListener('click', () => {
+                    nav.classList.toggle('nav-open');
+                });
+
+                // Hide menu after clicking a link
+                nav.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        // Check if the link is within the mobile menu and the menu is open
+                        if (nav.classList.contains('nav-open')) {
+                            nav.classList.remove('nav-open');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
